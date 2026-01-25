@@ -1,4 +1,4 @@
-import type { TIngredient } from '@utils/types.ts';
+import type { TIngredient } from '@utils/types.ts'
 
 export const ingredients: TIngredient[] = [
   {
@@ -123,8 +123,10 @@ export const ingredients: TIngredient[] = [
     calories: 986,
     price: 300,
     image: 'https://code.s3.yandex.net/react/code/mineral_rings.png',
-    image_mobile: 'https://code.s3.yandex.net/react/code/mineral_rings-mobile.png',
-    image_large: 'https://code.s3.yandex.net/react/code/mineral_rings-large.png',
+    image_mobile:
+      'https://code.s3.yandex.net/react/code/mineral_rings-mobile.png',
+    image_large:
+      'https://code.s3.yandex.net/react/code/mineral_rings-large.png',
     __v: 0,
   },
   {
@@ -211,4 +213,4 @@ export const ingredients: TIngredient[] = [
     image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
     __v: 0,
   },
-];
+]

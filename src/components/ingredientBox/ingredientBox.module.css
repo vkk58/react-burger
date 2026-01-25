@@ -1,0 +1,38 @@
+.ingredientBox {
+  position: relative;
+  flex: none;
+  flex-grow: 0;
+  order: 0;
+  width: 272px;
+  height: 208px;
+}
+
+.menu {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  list-style-type: none;
+}
+
+.priceContainer {
+  display: flex;
+  flex: none;
+  flex-grow: 0;
+  flex-direction: row;
+  order: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  padding: 0;
+  background: #131316;
+}
+
+.counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+}

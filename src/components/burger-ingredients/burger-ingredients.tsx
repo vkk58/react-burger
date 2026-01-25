@@ -1,17 +1,52 @@
-import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { Tab } from '@krgaa/react-developer-burger-ui-components'
+import { useMemo, useState } from 'react'
 
-import type { TIngredient } from '@utils/types';
+import { IngredientBox } from '../ingredientBox/ingredientBox'
 
-import styles from './burger-ingredients.module.css';
+import type { TIngredient } from '@utils/types'
+
+import styles from './burger-ingredients.module.css'
 
 type TBurgerIngredientsProps = {
-  ingredients: TIngredient[];
-};
+  ingredients: TIngredient[]
+}
+
+type IngredientsCounter = { id: string; counter: number }
 
 export const BurgerIngredients = ({
   ingredients,
 }: TBurgerIngredientsProps): React.JSX.Element => {
-  console.log(ingredients);
+  const [selectTab, setSelectedTab] = useState('bun')
+  const [ingredientsCounterArray, setingredientsCounterArray] = useState<
+    IngredientsCounter[]
+  >([])
+
+  const increaseArray = (id: string): void => {
+    setingredientsCounterArray((array) => {
+      const newArray: IngredientsCounter[] | undefined = [...array]
+      const index = newArray.findIndex((item) => item.id === id)
+      if (index === -1) {
+        return [...array, { id: id, counter: 1 }]
+      }
+
+      newArray[index] = {
+        ...newArray[index],
+        counter: newArray[index].counter + 1,
+      }
+      return newArray
+    })
+  }
+
+  const ingedientsArray = useMemo(() => {
+    return ingredients.filter((i) => i.type === selectTab)
+  }, [selectTab])
+
+  const getCounter = (id: string): number => {
+    const ret = ingredientsCounterArray.find(
+      (array) => array.id === id
+    )?.counter
+    return ret ?? 0
+  }
 
   return (
     <section className={styles.burger_ingredients}>
@@ -19,33 +54,43 @@ export const BurgerIngredients = ({
         <ul className={styles.menu}>
           <Tab
             value="bun"
-            active={true}
+            active={selectTab === 'bun' ? true : false}
             onClick={() => {
-              /* TODO */
+              setSelectedTab('bun')
             }}
           >
             Булки
           </Tab>
           <Tab
             value="main"
-            active={false}
+            active={selectTab === 'main' ? true : false}
             onClick={() => {
-              /* TODO */
+              setSelectedTab('main')
             }}
           >
             Начинки
           </Tab>
           <Tab
             value="sauce"
-            active={false}
+            active={selectTab === 'sauce' ? true : false}
             onClick={() => {
-              /* TODO */
+              setSelectedTab('sauce')
             }}
           >
             Соусы
           </Tab>
         </ul>
       </nav>
+      <div className={styles.ingredientsList}>
+        {ingedientsArray.map((ingredient) => (
+          <IngredientBox
+            key={ingredient._id}
+            ingredient={ingredient}
+            counter={getCounter(ingredient._id)}
+            increaseArray={increaseArray}
+          />
+        ))}
+      </div>
     </section>
-  );
-};
+  )
+}

@@ -10,23 +10,20 @@ import styles from './ingredientBox.module.css'
 type TIngredientBoxProps = {
   ingredient: TIngredient
   counter: number
-  increaseArray: (id: string) => void
+  addIngredient2Order: (id: string) => void
 }
 export const IngredientBox = ({
   ingredient,
   counter,
-  increaseArray,
+  addIngredient2Order,
 }: TIngredientBoxProps): React.JSX.Element => {
-  console.log('tyt', counter)
-
-  console.log('return', counter)
   return (
     <>
       <article
         className={styles.ingredientBox}
         id={ingredient._id}
         onClick={() => {
-          increaseArray(ingredient._id)
+          addIngredient2Order(ingredient._id)
         }}
       >
         <img src={ingredient.image} alt={ingredient.name}></img>

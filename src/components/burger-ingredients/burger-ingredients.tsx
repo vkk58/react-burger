@@ -7,44 +7,32 @@ import type { TIngredient } from '@utils/types'
 
 import styles from './burger-ingredients.module.css'
 
-type TBurgerIngredientsProps = {
+export type TBurgerIngredientsProps = {
   ingredients: TIngredient[]
+  orderArray: TIngredient[]
+  setOrderArray: (array: TIngredient[]) => void
 }
 
-type IngredientsCounter = { id: string; counter: number }
-
-export const BurgerIngredients = ({
-  ingredients,
-}: TBurgerIngredientsProps): React.JSX.Element => {
+export const BurgerIngredients = (
+  props: TBurgerIngredientsProps
+): React.JSX.Element => {
+  const { ingredients, orderArray, setOrderArray } = props
   const [selectTab, setSelectedTab] = useState('bun')
-  const [ingredientsCounterArray, setingredientsCounterArray] = useState<
-    IngredientsCounter[]
-  >([])
-
-  const increaseArray = (id: string): void => {
-    setingredientsCounterArray((array) => {
-      const newArray: IngredientsCounter[] | undefined = [...array]
-      const index = newArray.findIndex((item) => item.id === id)
-      if (index === -1) {
-        return [...array, { id: id, counter: 1 }]
-      }
-
-      newArray[index] = {
-        ...newArray[index],
-        counter: newArray[index].counter + 1,
-      }
-      return newArray
-    })
-  }
-
   const ingedientsArray = useMemo(() => {
     return ingredients.filter((i) => i.type === selectTab)
   }, [selectTab])
 
+  const addIngredient2Order = (id: string): void => {
+    const ingredientForOrder = ingredients.find((item) => item._id === id)
+
+    if (ingredientForOrder) {
+      const newOrderArray = [...orderArray, ingredientForOrder]
+      setOrderArray(newOrderArray)
+    }
+  }
+
   const getCounter = (id: string): number => {
-    const ret = ingredientsCounterArray.find(
-      (array) => array.id === id
-    )?.counter
+    const ret = orderArray.filter((array) => array._id === id).length
     return ret ?? 0
   }
 
@@ -87,7 +75,7 @@ export const BurgerIngredients = ({
             key={ingredient._id}
             ingredient={ingredient}
             counter={getCounter(ingredient._id)}
-            increaseArray={increaseArray}
+            addIngredient2Order={addIngredient2Order}
           />
         ))}
       </div>

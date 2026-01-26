@@ -13,6 +13,7 @@ import styles from './app.module.css'
 export const App = (): React.JSX.Element => {
   const [isLoad, setLoad] = useState(false)
   const [ingedientsArray, setIngedientsArray] = useState<TIngredient[]>([])
+  const [orderArray, setOrderArray] = useState<TIngredient[]>([])
 
   useEffect(() => {
     getIngredients()
@@ -34,8 +35,15 @@ export const App = (): React.JSX.Element => {
       <main className={`${styles.main} pl-5 pr-5`}>
         {isLoad ? (
           <>
-            <BurgerIngredients ingredients={ingedientsArray} />
-            <BurgerConstructor ingredients={ingedientsArray} />
+            <BurgerIngredients
+              ingredients={ingedientsArray}
+              orderArray={orderArray}
+              setOrderArray={setOrderArray}
+            />
+            <BurgerConstructor
+              orderArray={orderArray}
+              setOrderArray={setOrderArray}
+            />
           </>
         ) : (
           <Preloader />

@@ -3,62 +3,90 @@ import {
   CurrencyIcon,
 } from '@krgaa/react-developer-burger-ui-components'
 
-import type { TIngredient } from '@utils/types'
+import type { TIngredient4BurgerConstructor } from '@utils/types'
 
 import styles from './burger-constructor.module.css'
 
 export type TBurgerConstructorProps = {
-  orderArray: TIngredient[]
-  setOrderArray: (array: TIngredient[]) => void
+  orderArray: TIngredient4BurgerConstructor[]
+  setOrderArray: (array: TIngredient4BurgerConstructor[]) => void
 }
+
 export const BurgerConstructor = (
   props: TBurgerConstructorProps
 ): React.JSX.Element => {
-  console.log(props.orderArray)
-
   const { orderArray, setOrderArray } = props
   const orderArrayLength = orderArray.length - 1
-  const deleteIngredientFromOrder = (index: number): void => {
-    if (index !== 0 || index !== orderArrayLength) {
-      const newOrderArray = orderArray.filter((_, i) => i !== index)
-      setOrderArray(newOrderArray)
-    }
-  }
-  const getType = (currentPosition: number): string => {
-    if (currentPosition === 0) return 'top'
-    if (currentPosition === orderArrayLength) return 'bottom'
 
-    return ''
+  const deleteIngredientFromOrder = (idConstructor: string): void => {
+    const newOrderArray = orderArray.filter(
+      (item) => item.idConstructor !== idConstructor
+    )
+    setOrderArray(newOrderArray)
   }
 
   const getSum = (): number => {
-    let ret = 0
-    for (const ingredient of orderArray) {
-      ret += ingredient.price
-    }
-    return ret
+    return orderArray.reduce((sum, ingredient) => sum + ingredient.price, 0)
   }
 
+  const firstIngredient = orderArray[0]
+  const lastIngredient = orderArray[orderArrayLength]
+  const middleIngredients = orderArray.slice(1, orderArrayLength)
+  const orderSum = getSum()
   return (
     <section className={styles.burger_constructor}>
-      {orderArray.map((ingredient, index) => (
-        <li className={styles.constructor_item} key={ingredient._id}>
+      {firstIngredient && (
+        <div className={styles.static_item}>
           <ConstructorElement
-            handleClose={function fee() {
-              deleteIngredientFromOrder(index)
-            }}
-            isLocked={index === 0 || index === orderArrayLength}
-            price={ingredient.price}
-            text={ingredient.name}
-            thumbnail={ingredient.image}
-            type={getType(index)}
+            type="top"
+            isLocked={true}
+            text={`${firstIngredient.name} (верх)`}
+            price={firstIngredient.price}
+            thumbnail={firstIngredient.image}
+            handleClose={() =>
+              deleteIngredientFromOrder(firstIngredient.idConstructor)
+            }
           />
-        </li>
-      ))}
-      <footer className={styles.priceContainer}>
-        <p className="text text_type_main-medium">{getSum()}</p>
-        <CurrencyIcon type="primary" />
-      </footer>
+        </div>
+      )}
+      <ul className={styles.scrollable_list}>
+        {middleIngredients.map((ingredient) => (
+          <li
+            className={styles.constructor_item}
+            key={ingredient.idConstructor}
+          >
+            <ConstructorElement
+              handleClose={() =>
+                deleteIngredientFromOrder(ingredient.idConstructor)
+              }
+              isLocked={false}
+              price={ingredient.price}
+              text={ingredient.name}
+              thumbnail={ingredient.image}
+            />
+          </li>
+        ))}
+      </ul>
+      {orderArray.length > 1 && (
+        <div className={styles.static_item}>
+          <ConstructorElement
+            type="bottom"
+            isLocked
+            text={`${lastIngredient.name} (низ)`}
+            price={lastIngredient.price}
+            thumbnail={lastIngredient.image}
+            handleClose={() =>
+              deleteIngredientFromOrder(lastIngredient.idConstructor)
+            }
+          />
+        </div>
+      )}
+      {orderSum && (
+        <footer className={styles.priceContainer}>
+          <p className="text text_type_main-medium">{orderSum}</p>
+          <CurrencyIcon type="primary" />
+        </footer>
+      )}
     </section>
   )
 }

@@ -3,14 +3,14 @@ import { useMemo, useState } from 'react'
 
 import { IngredientBox } from '../ingredientBox/ingredientBox'
 
-import type { TIngredient } from '@utils/types'
+import type { TIngredient, TIngredient4BurgerConstructor } from '@utils/types'
 
 import styles from './burger-ingredients.module.css'
 
 export type TBurgerIngredientsProps = {
   ingredients: TIngredient[]
-  orderArray: TIngredient[]
-  setOrderArray: (array: TIngredient[]) => void
+  orderArray: TIngredient4BurgerConstructor[]
+  setOrderArray: (array: TIngredient4BurgerConstructor[]) => void
 }
 
 export const BurgerIngredients = (
@@ -24,9 +24,42 @@ export const BurgerIngredients = (
 
   const addIngredient2Order = (id: string): void => {
     const ingredientForOrder = ingredients.find((item) => item._id === id)
+    if (
+      orderArray.length === 0 &&
+      ingredientForOrder &&
+      ingredientForOrder.type !== 'bun'
+    ) {
+      alert('Сначала должны быть булки')
+      return
+    }
 
-    if (ingredientForOrder) {
-      const newOrderArray = [...orderArray, ingredientForOrder]
+    if (
+      orderArray.length === 0 &&
+      ingredientForOrder &&
+      ingredientForOrder.type === 'bun'
+    ) {
+      const arrayBuns: TIngredient4BurgerConstructor[] = [
+        { ...ingredientForOrder, idConstructor: crypto.randomUUID() },
+        { ...ingredientForOrder, idConstructor: crypto.randomUUID() },
+      ]
+      setOrderArray(arrayBuns)
+      return
+    }
+
+    if (ingredientForOrder && ingredientForOrder !== undefined) {
+      const ingredientForOrderwithId: TIngredient4BurgerConstructor = {
+        ...ingredientForOrder,
+        idConstructor: crypto.randomUUID(),
+      }
+      /*
+      const newOrderArray: TIngredient4BurgerConstructor[] = [
+        ...orderArray,
+        ingredientForOrderwithId,
+      ]
+      setOrderArray(newOrderArray)
+      */
+      const newOrderArray: TIngredient4BurgerConstructor[] = [...orderArray]
+      newOrderArray.splice(-1, 0, ingredientForOrderwithId)
       setOrderArray(newOrderArray)
     }
   }

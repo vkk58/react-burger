@@ -51,13 +51,6 @@ export const BurgerIngredients = (
         ...ingredientForOrder,
         idConstructor: crypto.randomUUID(),
       }
-      /*
-      const newOrderArray: TIngredient4BurgerConstructor[] = [
-        ...orderArray,
-        ingredientForOrderwithId,
-      ]
-      setOrderArray(newOrderArray)
-      */
       const newOrderArray: TIngredient4BurgerConstructor[] = [...orderArray]
       newOrderArray.splice(-1, 0, ingredientForOrderwithId)
       setOrderArray(newOrderArray)

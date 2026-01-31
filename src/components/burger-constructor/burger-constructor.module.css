@@ -9,6 +9,7 @@
 .static_item {
   flex-shrink: 0;
   margin-bottom: 16px;
+  margin-left: 30px;
 }
 
 .scrollable_list {

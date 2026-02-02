@@ -13,14 +13,33 @@ export type TBurgerIngredientsProps = {
   setOrderArray: (array: TIngredient4BurgerConstructor[]) => void
 }
 
+type TabsValue = {
+  type: string
+  name: string
+}
+
+const tabArray: TabsValue[] = [
+  { type: 'bun', name: 'Булки' },
+  { type: 'main', name: 'Начинки' },
+  { type: 'sauce', name: 'Соусы' },
+]
+
 export const BurgerIngredients = (
   props: TBurgerIngredientsProps
 ): React.JSX.Element => {
   const { ingredients, orderArray, setOrderArray } = props
   const [selectTab, setSelectedTab] = useState('bun')
-  const ingedientsArray = useMemo(() => {
-    return ingredients.filter((i) => i.type === selectTab)
-  }, [selectTab])
+  const ingredientTypes = useMemo(() => {
+    const types: Record<string, TIngredient[]> = {}
+
+    tabArray.forEach((tab) => {
+      types[tab.type] = ingredients.filter(
+        (ingredient) => ingredient.type === tab.type
+      )
+    })
+
+    return types
+  }, [ingredients])
 
   const addIngredient2Order = (id: string): void => {
     const ingredientForOrder = ingredients.find((item) => item._id === id)
@@ -30,6 +49,15 @@ export const BurgerIngredients = (
       ingredientForOrder.type !== 'bun'
     ) {
       alert('Сначала должны быть булки')
+      return
+    }
+
+    if (
+      orderArray.length > 0 &&
+      ingredientForOrder &&
+      ingredientForOrder.type === 'bun'
+    ) {
+      alert('Булки уже используются')
       return
     }
 
@@ -66,44 +94,41 @@ export const BurgerIngredients = (
     <section className={styles.burger_ingredients}>
       <nav>
         <ul className={styles.menu}>
-          <Tab
-            value="bun"
-            active={selectTab === 'bun' ? true : false}
-            onClick={() => {
-              setSelectedTab('bun')
-            }}
-          >
-            Булки
-          </Tab>
-          <Tab
-            value="main"
-            active={selectTab === 'main' ? true : false}
-            onClick={() => {
-              setSelectedTab('main')
-            }}
-          >
-            Начинки
-          </Tab>
-          <Tab
-            value="sauce"
-            active={selectTab === 'sauce' ? true : false}
-            onClick={() => {
-              setSelectedTab('sauce')
-            }}
-          >
-            Соусы
-          </Tab>
+          {tabArray.map((tab) => (
+            <div key={tab.type}>
+              <Tab
+                key={tab.type}
+                value={tab.type}
+                active={selectTab === tab.type ? true : false}
+                onClick={() => {
+                  setSelectedTab(tab.type)
+                }}
+              >
+                {tab.name}
+              </Tab>
+            </div>
+          ))}
         </ul>
       </nav>
-      <div className={styles.ingredientsList}>
-        {ingedientsArray.map((ingredient) => (
-          <IngredientBox
-            key={ingredient._id}
-            ingredient={ingredient}
-            counter={getCounter(ingredient._id)}
-            addIngredient2Order={addIngredient2Order}
-          />
-        ))}
+      <div className={styles.ingredientsContainer}>
+        {tabArray.map((tab) => {
+          const ingredientsType = ingredientTypes[tab.type]
+          return (
+            <div className={styles.ingredientSection} key={tab.type}>
+              <h2 className="text text_type_main-large">{tab.name}</h2>
+              <div className={styles.ingredientsList}>
+                {ingredientsType.map((ingredient) => (
+                  <IngredientBox
+                    key={ingredient._id}
+                    ingredient={ingredient}
+                    counter={getCounter(ingredient._id)}
+                    addIngredient2Order={addIngredient2Order}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        })}
       </div>
     </section>
   )

@@ -8,6 +8,7 @@ import { useState } from 'react'
 
 import { ModalIngredientDetails } from '../modalIngredientDetails/modalIngredientDetails'
 import { ModalOrderDetails } from '../modalOrderDetails/modalOrderDetails'
+import { ModalOverLay } from '../modalOverlay/modalOverlay'
 
 import type { TIngredient4BurgerConstructor } from '@utils/types'
 
@@ -21,13 +22,10 @@ export type TBurgerConstructorProps = {
 export const BurgerConstructor = (
   props: TBurgerConstructorProps
 ): React.JSX.Element => {
-  const [isVisibleIngredientDetails, setVisibleIngredientDetails] =
-    useState(false)
-  const [isVisibleOrder, setVisibleOrder] = useState(false)
-  const [ingredientDetail, setIngredientDetail] =
-    useState<TIngredient4BurgerConstructor>()
+  const [isModalVisible, setModalVisible] = useState(false)
   const { orderArray, setOrderArray } = props
   const orderArrayLength = orderArray.length - 1
+  const [modalData, setModaldata] = useState<React.JSX.Element>(null)
 
   const deleteIngredientFromOrder = (idConstructor: string): void => {
     const newOrderArray = orderArray.filter(
@@ -41,13 +39,19 @@ export const BurgerConstructor = (
   const viewIngredientDetails = (
     ingredient: TIngredient4BurgerConstructor
   ): void => {
-    setIngredientDetail(ingredient)
-    setVisibleIngredientDetails(true)
+    if (ingredient !== undefined) {
+      const modalContent = <ModalIngredientDetails ingredient={ingredient} />
+
+      setModaldata(modalContent)
+      setModalVisible(true)
+    }
   }
 
   const createOrder = (): void => {
+    const modalContent = <ModalOrderDetails />
+    setModaldata(modalContent)
+    setModalVisible(true)
     setOrderArray([])
-    setVisibleOrder(true)
   }
 
   const firstIngredient = orderArray[0]
@@ -133,14 +137,8 @@ export const BurgerConstructor = (
           </Button>
         </footer>
       )}
-      {isVisibleIngredientDetails && ingredientDetail !== undefined && (
-        <ModalIngredientDetails
-          ingredient={ingredientDetail}
-          setVisibleIngredientDetails={setVisibleIngredientDetails}
-        />
-      )}
-      {isVisibleOrder && (
-        <ModalOrderDetails setVisibleOrder={setVisibleOrder} />
+      {isModalVisible && (
+        <ModalOverLay setModalVisible={setModalVisible} modalData={modalData} />
       )}
     </section>
   )

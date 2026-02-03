@@ -6,9 +6,9 @@ import {
 } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
 
+import { Modal } from '../modal/modal'
 import { ModalIngredientDetails } from '../modalIngredientDetails/modalIngredientDetails'
 import { ModalOrderDetails } from '../modalOrderDetails/modalOrderDetails'
-import { ModalOverLay } from '../modalOverlay/modalOverlay'
 
 import type { TIngredient4BurgerConstructor } from '@utils/types'
 
@@ -138,7 +138,7 @@ export const BurgerConstructor = (
         </footer>
       )}
       {isModalVisible && (
-        <ModalOverLay setModalVisible={setModalVisible} modalData={modalData} />
+        <Modal setModalVisible={setModalVisible} modalData={modalData} />
       )}
     </section>
   )

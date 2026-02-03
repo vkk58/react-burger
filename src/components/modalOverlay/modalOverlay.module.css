@@ -1,24 +1,9 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgb(0 0 0 / 60%);
-}
-
-.closeIcon {
-  position: absolute;
-  top: 40px;
-  right: 40px;
-  z-index: 1001;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
-.modalContent {
-  position: relative;
-  display: inline-block;
 }

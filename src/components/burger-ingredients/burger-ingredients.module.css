@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   max-width: 600px;
+  height: 100%;
   color: var(--text-primary-color);
   font-family: 'Jet Brains Mono', serif;
 }
@@ -12,4 +13,26 @@
   padding: 0;
   text-align: center;
   list-style-type: none;
+}
+
+.ingredientsList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 16px;
+}
+
+.ingredientsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  height: calc(100vh - 200px);
+  margin-top: 20px;
+  padding-right: 8px;
+  overflow-y: auto;
+}
+
+.ingredientSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }

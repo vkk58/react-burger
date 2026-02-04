@@ -3,9 +3,9 @@ import {
   ListIcon,
   Logo,
   ProfileIcon,
-} from '@krgaa/react-developer-burger-ui-components';
+} from '@krgaa/react-developer-burger-ui-components'
 
-import styles from './app-header.module.css';
+import styles from './app-header.module.css'
 
 export const AppHeader = (): React.JSX.Element => {
   return (
@@ -25,11 +25,14 @@ export const AppHeader = (): React.JSX.Element => {
         <div className={styles.logo}>
           <Logo />
         </div>
-        <a href="/profile" className={`${styles.link} ${styles.link_position_last}`}>
+        <a
+          href="/profile"
+          className={`${styles.link} ${styles.link_position_last}`}
+        >
           <ProfileIcon type="secondary" />
           <p className="text text_type_main-default ml-2">Личный кабинет</p>
         </a>
       </nav>
     </header>
-  );
-};
+  )
+}

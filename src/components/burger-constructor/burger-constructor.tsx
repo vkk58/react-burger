@@ -1,15 +1,145 @@
-import type { TIngredient } from '@utils/types';
+import {
+  Button,
+  ConstructorElement,
+  CurrencyIcon,
+  DragIcon,
+} from '@krgaa/react-developer-burger-ui-components'
+import { useState } from 'react'
 
-import styles from './burger-constructor.module.css';
+import { Modal } from '../modal/modal'
+import { ModalIngredientDetails } from '../modalIngredientDetails/modalIngredientDetails'
+import { ModalOrderDetails } from '../modalOrderDetails/modalOrderDetails'
 
-type TBurgerConstructorProps = {
-  ingredients: TIngredient[];
-};
+import type { TIngredient4BurgerConstructor } from '@utils/types'
 
-export const BurgerConstructor = ({
-  ingredients,
-}: TBurgerConstructorProps): React.JSX.Element => {
-  console.log(ingredients);
+import styles from './burger-constructor.module.css'
 
-  return <section className={styles.burger_constructor}></section>;
-};
+export type TBurgerConstructorProps = {
+  orderArray: TIngredient4BurgerConstructor[]
+  setOrderArray: (array: TIngredient4BurgerConstructor[]) => void
+}
+
+export const BurgerConstructor = (
+  props: TBurgerConstructorProps
+): React.JSX.Element => {
+  const [isModalVisible, setModalVisible] = useState(false)
+  const { orderArray, setOrderArray } = props
+  const orderArrayLength = orderArray.length - 1
+  const [modalData, setModaldata] = useState<React.JSX.Element>(null)
+
+  const deleteIngredientFromOrder = (idConstructor: string): void => {
+    const newOrderArray = orderArray.filter(
+      (item) => item.idConstructor !== idConstructor
+    )
+    setOrderArray(newOrderArray)
+  }
+  const getSum = (): number => {
+    return orderArray.reduce((sum, ingredient) => sum + ingredient.price, 0)
+  }
+  const viewIngredientDetails = (
+    ingredient: TIngredient4BurgerConstructor
+  ): void => {
+    if (ingredient !== undefined) {
+      const modalContent = <ModalIngredientDetails ingredient={ingredient} />
+
+      setModaldata(modalContent)
+      setModalVisible(true)
+    }
+  }
+
+  const createOrder = (): void => {
+    const modalContent = <ModalOrderDetails />
+    setModaldata(modalContent)
+    setModalVisible(true)
+    setOrderArray([])
+  }
+
+  const firstIngredient = orderArray[0]
+  const lastIngredient = orderArray[orderArrayLength]
+  const middleIngredients = orderArray.slice(1, orderArrayLength)
+  const orderSum = getSum()
+
+  return (
+    <section className={styles.burger_constructor}>
+      {firstIngredient && (
+        <div
+          className={styles.static_item}
+          onClick={() => {
+            viewIngredientDetails(firstIngredient)
+          }}
+        >
+          <ConstructorElement
+            type="top"
+            isLocked={true}
+            text={`${firstIngredient.name} (верх)`}
+            price={firstIngredient.price}
+            thumbnail={firstIngredient.image}
+            handleClose={() =>
+              deleteIngredientFromOrder(firstIngredient.idConstructor)
+            }
+          />
+        </div>
+      )}
+      <ul className={styles.scrollable_list}>
+        {middleIngredients.map((ingredient) => (
+          <li
+            onClick={() => {
+              viewIngredientDetails(ingredient)
+            }}
+            className={styles.constructor_item}
+            key={ingredient.idConstructor}
+          >
+            <DragIcon type="primary" />
+            <ConstructorElement
+              handleClose={(e: React.MouseEvent) => {
+                e?.stopPropagation()
+                deleteIngredientFromOrder(ingredient.idConstructor)
+              }}
+              isLocked={false}
+              price={ingredient.price}
+              text={ingredient.name}
+              thumbnail={ingredient.image}
+            />
+          </li>
+        ))}
+      </ul>
+      {orderArray.length > 1 && (
+        <div
+          className={styles.static_item}
+          onClick={() => {
+            viewIngredientDetails(lastIngredient)
+          }}
+        >
+          <ConstructorElement
+            type="bottom"
+            isLocked
+            text={`${lastIngredient.name} (низ)`}
+            price={lastIngredient.price}
+            thumbnail={lastIngredient.image}
+            handleClose={() =>
+              deleteIngredientFromOrder(lastIngredient.idConstructor)
+            }
+          />
+        </div>
+      )}
+      {orderSum && (
+        <footer className={styles.priceContainer}>
+          <p className="text text_type_main-medium">{orderSum}</p>
+          <CurrencyIcon type="primary" />
+          <Button
+            onClick={() => {
+              createOrder()
+            }}
+            size="medium"
+            type="primary"
+          >
+            Оформить заказ
+          </Button>
+        </footer>
+      )}
+      {isModalVisible && (
+        <Modal setModalVisible={setModalVisible} modalData={modalData} />
+      )}
+    </section>
+  )
+}

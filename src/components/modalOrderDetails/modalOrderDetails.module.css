@@ -1,0 +1,14 @@
+.box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 720px;
+  min-height: 539px;
+  padding: 8px;
+  text-align: center;
+  background: #1c1c21;
+  border: 2px solid #4c4cff;
+  border-radius: 40px;
+  box-shadow: 0 24px 32px rgb(0 0 0 / 40%);
+}

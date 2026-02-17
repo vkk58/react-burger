@@ -1,29 +1,42 @@
-import { getIngredients } from '@/integration/ingredients'
+import { loadIngredientList } from '@/services/tasks/action'
+import {
+  selectAllIngredients,
+  selectIngredientsError,
+  selectIngredientsStatus,
+} from '@/services/tasks/ingredientSlice'
 import { Preloader } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { AppHeader } from '@components/app-header/app-header'
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor'
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients'
 
-import type { TIngredient, TIngredient4BurgerConstructor } from '@/utils/types'
+import type { AppDispatch } from '@/services/store'
+import type { TIngredient4BurgerConstructor } from '@/utils/types'
 
 import styles from './app.module.css'
 
 export const App = (): React.JSX.Element => {
-  const [isLoad, setLoad] = useState(false)
-  const [ingedientsArray, setIngedientsArray] = useState<TIngredient[]>([])
+  const dispatch = useDispatch<AppDispatch>()
+  const ingredients = useSelector(selectAllIngredients)
+  const ingredientsStatus = useSelector(selectIngredientsStatus)
+  const ingredientsError = useSelector(selectIngredientsError)
   const [orderArray, setOrderArray] = useState<TIngredient4BurgerConstructor[]>(
     []
   )
+
   useEffect(() => {
-    getIngredients()
-      .then((result) => {
-        setIngedientsArray(result)
-        setLoad(true)
-      })
-      .catch((error) => console.log(error))
-  }, [])
+    void dispatch(loadIngredientList())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (ingredientsStatus === 'success') {
+      console.log('Данные загружены!')
+    } else if (ingredientsStatus === 'error') {
+      alert(ingredientsError || 'Ошибка загрузки')
+    }
+  }, [ingredientsStatus, ingredientsError])
 
   return (
     <div className={styles.app}>
@@ -34,10 +47,11 @@ export const App = (): React.JSX.Element => {
         Соберите бургер
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
-        {isLoad ? (
+        {ingredientsStatus === 'loading' && <Preloader />}
+        {ingredientsStatus === 'success' && (
           <>
             <BurgerIngredients
-              ingredients={ingedientsArray}
+              ingredients={ingredients}
               orderArray={orderArray}
               setOrderArray={setOrderArray}
             />
@@ -46,9 +60,8 @@ export const App = (): React.JSX.Element => {
               setOrderArray={setOrderArray}
             />
           </>
-        ) : (
-          <Preloader />
         )}
+        {ingredientsStatus === 'error' && <div>{ingredientsError}</div>}
       </main>
     </div>
   )

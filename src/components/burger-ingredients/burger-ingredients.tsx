@@ -1,5 +1,5 @@
 import { Tab } from '@krgaa/react-developer-burger-ui-components'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { IngredientBox } from '../ingredientBox/ingredientBox'
 
@@ -27,8 +27,11 @@ const tabArray: TabsValue[] = [
 export const BurgerIngredients = (
   props: TBurgerIngredientsProps
 ): React.JSX.Element => {
+  const tabsRecords = useRef<Record<string, HTMLElement | null>>({})
+  const tabsContainer = useRef<HTMLElement>(null)
   const { ingredients, orderArray, setOrderArray } = props
   const [selectTab, setSelectedTab] = useState('bun')
+
   const ingredientTypes = useMemo(() => {
     const types: Record<string, TIngredient[]> = {}
 
@@ -40,6 +43,37 @@ export const BurgerIngredients = (
 
     return types
   }, [ingredients])
+
+  useEffect(() => {
+    const selectActiveTab = (): void => {
+      console.log('sdfsdsdf')
+      const containerEl = tabsContainer.current
+      const tabs = tabsRecords.current
+
+      if (!tabs || !containerEl) return
+      const containerPos = containerEl.getBoundingClientRect()
+
+      tabArray.forEach((tab) => {
+        if (tabs) {
+          const curTab = tabs[tab.type]
+          const tabPosition = curTab?.getBoundingClientRect()
+
+          if (tabPosition && tabPosition.top <= containerPos.top) {
+            setSelectedTab(tab.type)
+            return
+          }
+        }
+      })
+    }
+
+    if (tabsContainer.current)
+      tabsContainer.current.addEventListener('scroll', selectActiveTab)
+
+    return (): void => {
+      if (tabsContainer.current)
+        tabsContainer.current.removeEventListener('scroll', selectActiveTab)
+    }
+  }, [])
 
   const addIngredient2Order = (id: string): void => {
     const ingredientForOrder = ingredients.find((item) => item._id === id)
@@ -110,11 +144,24 @@ export const BurgerIngredients = (
           ))}
         </ul>
       </nav>
-      <div className={styles.ingredientsContainer}>
+      <div
+        className={styles.ingredientsContainer}
+        ref={(el) => {
+          tabsContainer.current = el
+        }}
+      >
         {tabArray.map((tab) => {
           const ingredientsType = ingredientTypes[tab.type]
           return (
-            <div className={styles.ingredientSection} key={tab.type}>
+            <div
+              className={styles.ingredientSection}
+              key={tab.type}
+              ref={(el) => {
+                if (tabsRecords.current) {
+                  tabsRecords.current[tab.type] = el
+                }
+              }}
+            >
               <h2 className="text text_type_main-large">{tab.name}</h2>
               <div className={styles.ingredientsList}>
                 {ingredientsType.map((ingredient) => (

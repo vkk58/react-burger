@@ -5,7 +5,7 @@ import {
   selectIngredientsStatus,
 } from '@/services/tasks/ingredientSlice'
 import { Preloader } from '@krgaa/react-developer-burger-ui-components'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppHeader } from '@components/app-header/app-header'
@@ -13,7 +13,6 @@ import { BurgerConstructor } from '@components/burger-constructor/burger-constru
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients'
 
 import type { AppDispatch } from '@/services/store'
-import type { TIngredient4BurgerConstructor } from '@/utils/types'
 
 import styles from './app.module.css'
 
@@ -22,18 +21,13 @@ export const App = (): React.JSX.Element => {
   const ingredients = useSelector(selectAllIngredients)
   const ingredientsStatus = useSelector(selectIngredientsStatus)
   const ingredientsError = useSelector(selectIngredientsError)
-  const [orderArray, setOrderArray] = useState<TIngredient4BurgerConstructor[]>(
-    []
-  )
 
   useEffect(() => {
     void dispatch(loadIngredientList())
   }, [dispatch])
 
   useEffect(() => {
-    if (ingredientsStatus === 'success') {
-      console.log('Данные загружены!')
-    } else if (ingredientsStatus === 'error') {
+    if (ingredientsStatus === 'error') {
       alert(ingredientsError || 'Ошибка загрузки')
     }
   }, [ingredientsStatus, ingredientsError])
@@ -50,15 +44,8 @@ export const App = (): React.JSX.Element => {
         {ingredientsStatus === 'loading' && <Preloader />}
         {ingredientsStatus === 'success' && (
           <>
-            <BurgerIngredients
-              ingredients={ingredients}
-              orderArray={orderArray}
-              setOrderArray={setOrderArray}
-            />
-            <BurgerConstructor
-              orderArray={orderArray}
-              setOrderArray={setOrderArray}
-            />
+            <BurgerIngredients ingredients={ingredients} />
+            <BurgerConstructor />
           </>
         )}
         {ingredientsStatus === 'error' && <div>{ingredientsError}</div>}

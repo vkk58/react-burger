@@ -1,3 +1,10 @@
+import { sendOrder } from '@/integration/sendOrder'
+import {
+  clearOrder,
+  currentOrder,
+  orderSum,
+  removeIngredientFromOrder,
+} from '@/services/tasks/orderSlice'
 import {
   Button,
   ConstructorElement,
@@ -5,6 +12,7 @@ import {
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Modal } from '../modal/modal'
 import { ModalIngredientDetails } from '../modalIngredientDetails/modalIngredientDetails'
@@ -14,28 +22,17 @@ import type { TIngredient4BurgerConstructor } from '@utils/types'
 
 import styles from './burger-constructor.module.css'
 
-export type TBurgerConstructorProps = {
-  orderArray: TIngredient4BurgerConstructor[]
-  setOrderArray: (array: TIngredient4BurgerConstructor[]) => void
-}
-
-export const BurgerConstructor = (
-  props: TBurgerConstructorProps
-): React.JSX.Element => {
+export const BurgerConstructor = (): React.JSX.Element => {
+  const dispatch = useDispatch()
   const [isModalVisible, setModalVisible] = useState(false)
-  const { orderArray, setOrderArray } = props
+  const orderArray = useSelector(currentOrder)
   const orderArrayLength = orderArray.length - 1
   const [modalData, setModaldata] = useState<React.JSX.Element>(null)
 
   const deleteIngredientFromOrder = (idConstructor: string): void => {
-    const newOrderArray = orderArray.filter(
-      (item) => item.idConstructor !== idConstructor
-    )
-    setOrderArray(newOrderArray)
+    dispatch(removeIngredientFromOrder(idConstructor))
   }
-  const getSum = (): number => {
-    return orderArray.reduce((sum, ingredient) => sum + ingredient.price, 0)
-  }
+  const currentOrderSum = useSelector(orderSum)
   const viewIngredientDetails = (
     ingredient: TIngredient4BurgerConstructor
   ): void => {
@@ -47,17 +44,21 @@ export const BurgerConstructor = (
     }
   }
 
-  const createOrder = (): void => {
-    const modalContent = <ModalOrderDetails />
-    setModaldata(modalContent)
-    setModalVisible(true)
-    setOrderArray([])
+  const createOrder = async (): Promise<void> => {
+    const createOrderResult = await sendOrder(orderArray)
+    if (createOrderResult.success === true) {
+      const modalContent = (
+        <ModalOrderDetails orderId={createOrderResult.order.number} />
+      )
+      setModaldata(modalContent)
+      setModalVisible(true)
+      dispatch(clearOrder())
+    }
   }
 
   const firstIngredient = orderArray[0]
   const lastIngredient = orderArray[orderArrayLength]
   const middleIngredients = orderArray.slice(1, orderArrayLength)
-  const orderSum = getSum()
 
   return (
     <section className={styles.burger_constructor}>
@@ -91,7 +92,7 @@ export const BurgerConstructor = (
           >
             <DragIcon type="primary" />
             <ConstructorElement
-              handleClose={(e: React.MouseEvent) => {
+              handleClose={(e: React.MouseEvent): void => {
                 e?.stopPropagation()
                 deleteIngredientFromOrder(ingredient.idConstructor)
               }}
@@ -122,13 +123,13 @@ export const BurgerConstructor = (
           />
         </div>
       )}
-      {orderSum && (
+      {currentOrderSum && (
         <footer className={styles.priceContainer}>
-          <p className="text text_type_main-medium">{orderSum}</p>
+          <p className="text text_type_main-medium">{currentOrderSum}</p>
           <CurrencyIcon type="primary" />
           <Button
             onClick={() => {
-              createOrder()
+              void createOrder()
             }}
             size="medium"
             type="primary"

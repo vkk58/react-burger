@@ -6,6 +6,8 @@ import {
 } from '@/services/tasks/ingredientSlice'
 import { Preloader } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppHeader } from '@components/app-header/app-header'
@@ -40,16 +42,18 @@ export const App = (): React.JSX.Element => {
       >
         Соберите бургер
       </h1>
-      <main className={`${styles.main} pl-5 pr-5`}>
-        {ingredientsStatus === 'loading' && <Preloader />}
-        {ingredientsStatus === 'success' && (
-          <>
-            <BurgerIngredients ingredients={ingredients} />
-            <BurgerConstructor />
-          </>
-        )}
-        {ingredientsStatus === 'error' && <div>{ingredientsError}</div>}
-      </main>
+      <DndProvider backend={HTML5Backend}>
+        <main className={`${styles.main} pl-5 pr-5`}>
+          {ingredientsStatus === 'loading' && <Preloader />}
+          {ingredientsStatus === 'success' && (
+            <>
+              <BurgerIngredients ingredients={ingredients} />
+              <BurgerConstructor />
+            </>
+          )}
+          {ingredientsStatus === 'error' && <div>{ingredientsError}</div>}
+        </main>
+      </DndProvider>
     </div>
   )
 }

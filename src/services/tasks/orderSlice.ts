@@ -55,6 +55,12 @@ const orderSlice = createSlice({
     clearOrder: (state) => {
       state.items = []
     },
+    sortOrder: (
+      state,
+      action: PayloadAction<TIngredient4BurgerConstructor[]>
+    ) => {
+      state.items = action.payload
+    },
   },
 })
 
@@ -78,7 +84,11 @@ export const orderSum = (state: RootState): number => {
 
 export const orderSliceError = (state: RootState): string => state.order.error
 
-export const { addIngredient2Order, removeIngredientFromOrder, clearOrder } =
-  orderSlice.actions
+export const {
+  addIngredient2Order,
+  removeIngredientFromOrder,
+  clearOrder,
+  sortOrder,
+} = orderSlice.actions
 
 export default orderSlice.reducer

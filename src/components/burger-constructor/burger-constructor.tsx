@@ -1,5 +1,6 @@
 import { sendOrder } from '@/integration/sendOrder'
 import {
+  addIngredient2Order,
   clearOrder,
   currentOrder,
   orderSum,
@@ -12,13 +13,15 @@ import {
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
+import { useDrop } from 'react-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { IngredientItem } from '../ingredientBox/ingredientBox'
 import { Modal } from '../modal/modal'
 import { ModalIngredientDetails } from '../modalIngredientDetails/modalIngredientDetails'
 import { ModalOrderDetails } from '../modalOrderDetails/modalOrderDetails'
 
-import type { TIngredient4BurgerConstructor } from '@utils/types'
+import type { TIngredient, TIngredient4BurgerConstructor } from '@utils/types'
 
 import styles from './burger-constructor.module.css'
 
@@ -56,12 +59,33 @@ export const BurgerConstructor = (): React.JSX.Element => {
     }
   }
 
+  const [, dropRef] = useDrop(
+    () => ({
+      accept: IngredientItem.INGREDIENT,
+      drop: (item: { ingredient: TIngredient }): void => {
+        console.log('itemdsfd', item)
+        if (item) {
+          const ingredientItem: TIngredient4BurgerConstructor = {
+            ...item.ingredient,
+            idConstructor: crypto.randomUUID(),
+          }
+
+          dispatch(addIngredient2Order(ingredientItem))
+        }
+      },
+    }),
+    [orderArray]
+  )
+
   const firstIngredient = orderArray[0]
   const lastIngredient = orderArray[orderArrayLength]
   const middleIngredients = orderArray.slice(1, orderArrayLength)
 
   return (
-    <section className={styles.burger_constructor}>
+    <section
+      className={styles.burger_constructor}
+      ref={dropRef as unknown as React.RefObject<HTMLElement>}
+    >
       {firstIngredient && (
         <div
           className={styles.static_item}

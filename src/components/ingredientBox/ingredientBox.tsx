@@ -1,24 +1,23 @@
 import {
   addIngredient2Order,
   countIngredient,
-  orderSliceError,
+  currentOrder,
 } from '@/services/tasks/orderSlice'
+import {
+  IngredientItem,
+  type TIngredient,
+  type TIngredient4BurgerConstructor,
+} from '@/utils/types'
 import {
   Counter,
   CurrencyIcon,
 } from '@krgaa/react-developer-burger-ui-components'
-import { useEffect } from 'react'
 import { useDrag, type DragSourceMonitor } from 'react-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
 import type { RootState } from '@/services/store'
-import type { TIngredient, TIngredient4BurgerConstructor } from '@/utils/types'
 
 import styles from './ingredientBox.module.css'
-
-export const IngredientItem = {
-  INGREDIENT: 'ingredient',
-}
 
 type TIngredientBoxProps = {
   ingredient: TIngredient
@@ -26,6 +25,7 @@ type TIngredientBoxProps = {
 export const IngredientBox = ({
   ingredient,
 }: TIngredientBoxProps): React.JSX.Element => {
+  const orderArray = useSelector(currentOrder)
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: IngredientItem.INGREDIENT,
@@ -40,19 +40,18 @@ export const IngredientBox = ({
 
   const dispatch = useDispatch()
 
-  const orderError = useSelector(orderSliceError)
-
   const counter = useSelector((state: RootState) =>
     countIngredient(state, ingredient._id)
   )
 
-  useEffect(() => {
-    if (orderError) {
-      alert(orderError)
-    }
-  }, [orderError, dispatch])
-
   const handleOnClick = (): void => {
+    const hasBun = orderArray.some((item) => item.type === 'bun')
+
+    if (ingredient.type !== 'bun' && !hasBun) {
+      alert('Сначала добавьте булку!')
+      return
+    }
+
     const item: TIngredient4BurgerConstructor = {
       ...ingredient,
       idConstructor: crypto.randomUUID(),

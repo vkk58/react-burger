@@ -4,24 +4,26 @@ import {
   clearOrder,
   currentOrder,
   orderSum,
-  removeIngredientFromOrder,
 } from '@/services/tasks/orderSlice'
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
 import { useDrop } from 'react-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { IngredientItem } from '../ingredientBox/ingredientBox'
+import {
+  type TIngredient,
+  type TIngredient4BurgerConstructor,
+  IngredientItem,
+} from '@utils/types'
+
 import { Modal } from '../modal/modal'
 import { ModalIngredientDetails } from '../modalIngredientDetails/modalIngredientDetails'
 import { ModalOrderDetails } from '../modalOrderDetails/modalOrderDetails'
-
-import type { TIngredient, TIngredient4BurgerConstructor } from '@utils/types'
+import { OrderContainer } from '../OrderContainer/OrderContainer'
 
 import styles from './burger-constructor.module.css'
 
@@ -32,9 +34,6 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const orderArrayLength = orderArray.length - 1
   const [modalData, setModaldata] = useState<React.JSX.Element>(null)
 
-  const deleteIngredientFromOrder = (idConstructor: string): void => {
-    dispatch(removeIngredientFromOrder(idConstructor))
-  }
   const currentOrderSum = useSelector(orderSum)
   const viewIngredientDetails = (
     ingredient: TIngredient4BurgerConstructor
@@ -63,7 +62,11 @@ export const BurgerConstructor = (): React.JSX.Element => {
     () => ({
       accept: IngredientItem.INGREDIENT,
       drop: (item: { ingredient: TIngredient }): void => {
-        console.log('itemdsfd', item)
+        const hasBun = orderArray.some((item) => item.type === 'bun')
+        if (item.ingredient.type !== 'bun' && !hasBun) {
+          alert('Сначала добавьте булку!')
+          return
+        }
         if (item) {
           const ingredientItem: TIngredient4BurgerConstructor = {
             ...item.ingredient,
@@ -99,35 +102,15 @@ export const BurgerConstructor = (): React.JSX.Element => {
             text={`${firstIngredient.name} (верх)`}
             price={firstIngredient.price}
             thumbnail={firstIngredient.image}
-            handleClose={() =>
-              deleteIngredientFromOrder(firstIngredient.idConstructor)
-            }
           />
         </div>
       )}
-      <ul className={styles.scrollable_list}>
-        {middleIngredients.map((ingredient) => (
-          <li
-            onClick={() => {
-              viewIngredientDetails(ingredient)
-            }}
-            className={styles.constructor_item}
-            key={ingredient.idConstructor}
-          >
-            <DragIcon type="primary" />
-            <ConstructorElement
-              handleClose={(e: React.MouseEvent): void => {
-                e?.stopPropagation()
-                deleteIngredientFromOrder(ingredient.idConstructor)
-              }}
-              isLocked={false}
-              price={ingredient.price}
-              text={ingredient.name}
-              thumbnail={ingredient.image}
-            />
-          </li>
-        ))}
-      </ul>
+      {middleIngredients.length > 0 && (
+        <OrderContainer
+          ingredients={middleIngredients}
+          viewIngredientDetails={viewIngredientDetails}
+        />
+      )}
       {orderArray.length > 1 && (
         <div
           className={styles.static_item}
@@ -141,9 +124,6 @@ export const BurgerConstructor = (): React.JSX.Element => {
             text={`${lastIngredient.name} (низ)`}
             price={lastIngredient.price}
             thumbnail={lastIngredient.image}
-            handleClose={() =>
-              deleteIngredientFromOrder(lastIngredient.idConstructor)
-            }
           />
         </div>
       )}

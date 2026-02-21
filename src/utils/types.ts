@@ -16,3 +16,7 @@ export type TIngredient = {
 export type TIngredient4BurgerConstructor = TIngredient & {
   idConstructor: string
 }
+
+export const IngredientItem = {
+  INGREDIENT: 'ingredient',
+}

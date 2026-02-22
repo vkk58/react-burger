@@ -1,7 +1,7 @@
-import { URL_API } from '@/utils/constants'
-import axios, { type AxiosResponse } from 'axios'
+import api from './baseIntegration'
 
 import type { TIngredient4BurgerConstructor } from '@/utils/types'
+import type { AxiosResponse } from 'axios'
 
 type Order = {
   number: number
@@ -12,10 +12,6 @@ type OrderResponse = {
   name: string
   order: Order
 }
-
-const api = axios.create({
-  baseURL: URL_API,
-})
 
 export async function sendOrder(
   order: TIngredient4BurgerConstructor[]

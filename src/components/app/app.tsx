@@ -1,6 +1,5 @@
 import { loadIngredientList } from '@/services/tasks/action'
 import {
-  selectAllIngredients,
   selectIngredientsError,
   selectIngredientsStatus,
 } from '@/services/tasks/ingredientSlice'
@@ -20,7 +19,6 @@ import styles from './app.module.css'
 
 export const App = (): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>()
-  const ingredients = useSelector(selectAllIngredients)
   const ingredientsStatus = useSelector(selectIngredientsStatus)
   const ingredientsError = useSelector(selectIngredientsError)
 
@@ -47,7 +45,7 @@ export const App = (): React.JSX.Element => {
           {ingredientsStatus === 'loading' && <Preloader />}
           {ingredientsStatus === 'success' && (
             <>
-              <BurgerIngredients ingredients={ingredients} />
+              <BurgerIngredients />
               <BurgerConstructor />
             </>
           )}

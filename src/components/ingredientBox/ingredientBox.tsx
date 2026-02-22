@@ -1,19 +1,15 @@
-import {
-  addIngredient2Order,
-  countIngredient,
-  currentOrder,
-} from '@/services/tasks/orderSlice'
-import {
-  IngredientItem,
-  type TIngredient,
-  type TIngredient4BurgerConstructor,
-} from '@/utils/types'
+import { countIngredient } from '@/services/tasks/orderSlice'
+import { IngredientItem, type TIngredient } from '@/utils/types'
 import {
   Counter,
   CurrencyIcon,
 } from '@krgaa/react-developer-burger-ui-components'
+import { useState } from 'react'
 import { useDrag, type DragSourceMonitor } from 'react-dnd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+
+import { IngredientDetails } from '../ingredientDetails/ingredientDetails'
+import { Modal } from '../modal/modal'
 
 import type { RootState } from '@/services/store'
 
@@ -25,7 +21,8 @@ type TIngredientBoxProps = {
 export const IngredientBox = ({
   ingredient,
 }: TIngredientBoxProps): React.JSX.Element => {
-  const orderArray = useSelector(currentOrder)
+  const [isModalVisible, setModalVisible] = useState(false)
+  const [modalData, setModaldata] = useState<React.JSX.Element>(null)
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: IngredientItem.INGREDIENT,
@@ -38,46 +35,42 @@ export const IngredientBox = ({
   )
   const opacity = isDragging ? 0.4 : 1
 
-  const dispatch = useDispatch()
-
   const counter = useSelector((state: RootState) =>
     countIngredient(state, ingredient._id)
   )
 
   const handleOnClick = (): void => {
-    const hasBun = orderArray.some((item) => item.type === 'bun')
-
-    if (ingredient.type !== 'bun' && !hasBun) {
-      alert('Сначала добавьте булку!')
-      return
+    if (ingredient !== undefined) {
+      const modalContent = <IngredientDetails ingredient={ingredient} />
+      setModaldata(modalContent)
+      setModalVisible(true)
     }
-
-    const item: TIngredient4BurgerConstructor = {
-      ...ingredient,
-      idConstructor: crypto.randomUUID(),
-    }
-    dispatch(addIngredient2Order(item))
   }
 
   return (
-    <article
-      ref={dragRef as unknown as React.RefObject<HTMLElement>}
-      className={styles.ingredientBox}
-      style={{ opacity }}
-      id={ingredient._id}
-      onClick={handleOnClick}
-    >
-      <img src={ingredient.image} alt={ingredient.name}></img>
-      <div className={styles.priceContainer}>
-        <div className="text text_type_main-small">{ingredient.price}</div>
-        <CurrencyIcon type="primary" />
-      </div>
-      <div className="text text_type_main-small">{ingredient.name}</div>
-      {counter > 0 ? (
-        <Counter count={counter} size="small" extraClass={styles.counter} />
-      ) : (
-        <></>
+    <>
+      <article
+        ref={dragRef as unknown as React.RefObject<HTMLElement>}
+        className={styles.ingredientBox}
+        style={{ opacity }}
+        id={ingredient._id}
+        onClick={handleOnClick}
+      >
+        <img src={ingredient.image} alt={ingredient.name}></img>
+        <div className={styles.priceContainer}>
+          <div className="text text_type_main-small">{ingredient.price}</div>
+          <CurrencyIcon type="primary" />
+        </div>
+        <div className="text text_type_main-small">{ingredient.name}</div>
+        {counter > 0 ? (
+          <Counter count={counter} size="small" extraClass={styles.counter} />
+        ) : (
+          <></>
+        )}
+      </article>
+      {isModalVisible && (
+        <Modal setModalVisible={setModalVisible} modalData={modalData} />
       )}
-    </article>
+    </>
   )
 }

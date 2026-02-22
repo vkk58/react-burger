@@ -22,7 +22,6 @@ type DragItem = {
 
 export type TOrderIngredientProps = {
   ingredient: TIngredient4BurgerConstructor
-  viewIngredientDetails: (ingredient: TIngredient4BurgerConstructor) => void
   moveIngredient: (dragIndex: number, hoverIndex: number) => void
   index: number
 }
@@ -31,7 +30,7 @@ export const DraggableOrderIngredient = (
   props: TOrderIngredientProps
 ): React.JSX.Element => {
   const ref = useRef<HTMLLIElement>(null)
-  const { ingredient, viewIngredientDetails, moveIngredient, index } = props
+  const { ingredient, moveIngredient, index } = props
   const dispatch = useDispatch()
 
   const [{ handlerId }, drop] = useDrop<
@@ -84,9 +83,6 @@ export const DraggableOrderIngredient = (
     <li
       ref={ref}
       data-handler-id={handlerId}
-      onClick={() => {
-        viewIngredientDetails(ingredient)
-      }}
       className={styles.constructor_item}
       key={ingredient.idConstructor}
     >

@@ -10,13 +10,12 @@ import styles from './OrderContainer.module.css'
 
 export type TBurgerIngredientsProps = {
   ingredients: TIngredient4BurgerConstructor[]
-  viewIngredientDetails: (ingredient: TIngredient4BurgerConstructor) => void
 }
 
 export const OrderContainer = (
   props: TBurgerIngredientsProps
 ): React.JSX.Element => {
-  const { ingredients, viewIngredientDetails } = props
+  const { ingredients } = props
   const dispatch = useDispatch()
   const orderArray = useSelector(currentOrder)
   const moveIngredient = useCallback(
@@ -42,7 +41,6 @@ export const OrderContainer = (
         ingredient={ingredient}
         index={index}
         moveIngredient={moveIngredient}
-        viewIngredientDetails={viewIngredientDetails}
       />
     )
   }

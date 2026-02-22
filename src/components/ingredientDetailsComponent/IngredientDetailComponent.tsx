@@ -1,10 +1,10 @@
-import styles from './ingredientDetail.module.css'
+import styles from './ingredientDetailComponent.module.css'
 
 type TIngredientDetailProps = {
   name: string
   value: number
 }
-export const IngredientDetail = (
+export const IngredientDetailComponent = (
   props: TIngredientDetailProps
 ): React.JSX.Element => {
   const { name, value } = props

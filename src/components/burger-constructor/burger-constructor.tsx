@@ -1,4 +1,4 @@
-import { sendOrder } from '@/integration/sendOrder'
+import { createOrder } from '@/services/tasks/action'
 import {
   addIngredient2Order,
   clearOrder,
@@ -6,11 +6,16 @@ import {
   orderSum,
 } from '@/services/tasks/orderSlice'
 import {
+  getOrderError,
+  getOrderNumber,
+  getOrderStatus,
+} from '@/services/tasks/sendOrderSlice'
+import {
   Button,
   ConstructorElement,
   CurrencyIcon,
 } from '@krgaa/react-developer-burger-ui-components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -21,9 +26,8 @@ import {
 } from '@utils/types'
 
 import { Modal } from '../modal/modal'
-import { ModalIngredientDetails } from '../modalIngredientDetails/modalIngredientDetails'
-import { ModalOrderDetails } from '../modalOrderDetails/modalOrderDetails'
 import { OrderContainer } from '../OrderContainer/OrderContainer'
+import { OrderDetails } from '../OrderDetails/OrderDetails'
 
 import styles from './burger-constructor.module.css'
 
@@ -33,36 +37,33 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const orderArray = useSelector(currentOrder)
   const orderArrayLength = orderArray.length - 1
   const [modalData, setModaldata] = useState<React.JSX.Element>(null)
+  const orderStatus = useSelector(getOrderStatus)
+  const orderError = useSelector(getOrderError)
+  const orderNumber = useSelector(getOrderNumber)
 
   const currentOrderSum = useSelector(orderSum)
-  const viewIngredientDetails = (
-    ingredient: TIngredient4BurgerConstructor
-  ): void => {
-    if (ingredient !== undefined) {
-      const modalContent = <ModalIngredientDetails ingredient={ingredient} />
 
-      setModaldata(modalContent)
-      setModalVisible(true)
-    }
+  const sendOrder = (): void => {
+    void dispatch(createOrder(orderArray))
   }
 
-  const createOrder = async (): Promise<void> => {
-    const createOrderResult = await sendOrder(orderArray)
-    if (createOrderResult.success === true) {
-      const modalContent = (
-        <ModalOrderDetails orderId={createOrderResult.order.number} />
-      )
+  useEffect(() => {
+    if (orderStatus === 'success' && orderNumber) {
+      const modalContent = <OrderDetails orderId={orderNumber} />
       setModaldata(modalContent)
       setModalVisible(true)
       dispatch(clearOrder())
+    } else if (orderStatus === 'error' && orderError) {
+      alert(`Ошибка при создании заказа: ${orderError}`)
     }
-  }
+  }, [orderStatus, orderNumber, orderError, dispatch])
 
   const [, dropRef] = useDrop(
     () => ({
       accept: IngredientItem.INGREDIENT,
       drop: (item: { ingredient: TIngredient }): void => {
         const hasBun = orderArray.some((item) => item.type === 'bun')
+        if (item.ingredient === undefined) return
         if (item.ingredient.type !== 'bun' && !hasBun) {
           alert('Сначала добавьте булку!')
           return
@@ -90,12 +91,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
       ref={dropRef as unknown as React.RefObject<HTMLElement>}
     >
       {firstIngredient && (
-        <div
-          className={styles.static_item}
-          onClick={() => {
-            viewIngredientDetails(firstIngredient)
-          }}
-        >
+        <div className={styles.static_item}>
           <ConstructorElement
             type="top"
             isLocked={true}
@@ -106,18 +102,10 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </div>
       )}
       {middleIngredients.length > 0 && (
-        <OrderContainer
-          ingredients={middleIngredients}
-          viewIngredientDetails={viewIngredientDetails}
-        />
+        <OrderContainer ingredients={middleIngredients} />
       )}
       {orderArray.length > 1 && (
-        <div
-          className={styles.static_item}
-          onClick={() => {
-            viewIngredientDetails(lastIngredient)
-          }}
-        >
+        <div className={styles.static_item}>
           <ConstructorElement
             type="bottom"
             isLocked
@@ -127,13 +115,13 @@ export const BurgerConstructor = (): React.JSX.Element => {
           />
         </div>
       )}
-      {currentOrderSum && (
+      {currentOrderSum > 0 && (
         <footer className={styles.priceContainer}>
           <p className="text text_type_main-medium">{currentOrderSum}</p>
           <CurrencyIcon type="primary" />
           <Button
             onClick={() => {
-              void createOrder()
+              void sendOrder()
             }}
             size="medium"
             type="primary"

@@ -1,0 +1,6 @@
+.constructor_item {
+  display: flex;
+  align-items: center;
+  min-height: 80px;
+  margin-bottom: 16px;
+}

@@ -1,16 +1,12 @@
-import { URL_API } from '@/utils/constants'
-import axios, { type AxiosResponse } from 'axios'
+import api from './baseIntegration'
 
 import type { TIngredient } from '@/utils/types'
+import type { AxiosResponse } from 'axios'
 
 type IngredientsResponse = {
   success: boolean
   data: TIngredient[]
 }
-
-const api = axios.create({
-  baseURL: URL_API,
-})
 
 export async function getIngredients(): Promise<TIngredient[]> {
   try {

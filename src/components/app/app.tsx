@@ -1,29 +1,36 @@
-import { getIngredients } from '@/integration/ingredients'
+import { loadIngredientList } from '@/services/tasks/action'
+import {
+  selectIngredientsError,
+  selectIngredientsStatus,
+} from '@/services/tasks/ingredientSlice'
 import { Preloader } from '@krgaa/react-developer-burger-ui-components'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { AppHeader } from '@components/app-header/app-header'
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor'
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients'
 
-import type { TIngredient, TIngredient4BurgerConstructor } from '@/utils/types'
+import type { AppDispatch } from '@/services/store'
 
 import styles from './app.module.css'
 
 export const App = (): React.JSX.Element => {
-  const [isLoad, setLoad] = useState(false)
-  const [ingedientsArray, setIngedientsArray] = useState<TIngredient[]>([])
-  const [orderArray, setOrderArray] = useState<TIngredient4BurgerConstructor[]>(
-    []
-  )
+  const dispatch = useDispatch<AppDispatch>()
+  const ingredientsStatus = useSelector(selectIngredientsStatus)
+  const ingredientsError = useSelector(selectIngredientsError)
+
   useEffect(() => {
-    getIngredients()
-      .then((result) => {
-        setIngedientsArray(result)
-        setLoad(true)
-      })
-      .catch((error) => console.log(error))
-  }, [])
+    void dispatch(loadIngredientList())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (ingredientsStatus === 'error') {
+      alert(ingredientsError || 'Ошибка загрузки')
+    }
+  }, [ingredientsStatus, ingredientsError])
 
   return (
     <div className={styles.app}>
@@ -33,23 +40,18 @@ export const App = (): React.JSX.Element => {
       >
         Соберите бургер
       </h1>
-      <main className={`${styles.main} pl-5 pr-5`}>
-        {isLoad ? (
-          <>
-            <BurgerIngredients
-              ingredients={ingedientsArray}
-              orderArray={orderArray}
-              setOrderArray={setOrderArray}
-            />
-            <BurgerConstructor
-              orderArray={orderArray}
-              setOrderArray={setOrderArray}
-            />
-          </>
-        ) : (
-          <Preloader />
-        )}
-      </main>
+      <DndProvider backend={HTML5Backend}>
+        <main className={`${styles.main} pl-5 pr-5`}>
+          {ingredientsStatus === 'loading' && <Preloader />}
+          {ingredientsStatus === 'success' && (
+            <>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </>
+          )}
+          {ingredientsStatus === 'error' && <div>{ingredientsError}</div>}
+        </main>
+      </DndProvider>
     </div>
   )
 }

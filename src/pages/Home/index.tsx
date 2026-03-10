@@ -15,9 +15,9 @@ import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredi
 
 import type { AppDispatch } from '@/services/store'
 
-import styles from './app.module.css'
+import styles from './styles.module.css'
 
-export const App = (): React.JSX.Element => {
+export const Home = (): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>()
   const ingredientsStatus = useSelector(selectIngredientsStatus)
   const ingredientsError = useSelector(selectIngredientsError)
@@ -55,4 +55,3 @@ export const App = (): React.JSX.Element => {
     </div>
   )
 }
-export default App

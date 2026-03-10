@@ -1,0 +1,49 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  width: 1240px;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.app-container {
+  display: flex; /* Включаем flexbox */
+  min-height: 100vh; /* На всю высоту экрана */
+}
+
+.sidebar {
+  width: 250px; /* Ширина меню */
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-right: 1px solid #ddd;
+}
+
+.vertical-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none; /* Убираем маркеры списка */
+}
+
+.vertical-nav li {
+  margin-bottom: 15px; /* Отступ между пунктами */
+}
+
+.vertical-nav a {
+  display: block; /* Чтобы ссылка занимала всю ширину */
+  padding: 10px 15px;
+  color: #333;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.vertical-nav a:hover {
+  background-color: #e0e0e0;
+}
+
+.content {
+  flex: 1; /* Занимает всё оставшееся место */
+  padding: 20px;
+}

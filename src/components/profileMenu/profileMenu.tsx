@@ -3,7 +3,6 @@ import {
   clearTokens,
   getUserRefreshToken,
 } from '@/services/tasks/userTokensSlice'
-import { Tab } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -36,7 +35,7 @@ export const ProfileMenu = (): React.JSX.Element => {
         void navigate('/profile')
         break
       case 'orderHistory':
-        setSelectedTab('profile')
+        setSelectedTab('orderHistory')
         void navigate('/profile/orders')
         break
       case 'exit':
@@ -59,25 +58,24 @@ export const ProfileMenu = (): React.JSX.Element => {
   }
 
   return (
-    <div className={styles.main}>
-      <nav>
-        <ul>
+    <>
+      <nav className={styles.menu}>
+        <ul className={styles.list}>
           {tabArray.map((tab) => (
-            <div key={tab.type}>
-              <Tab
-                key={tab.type}
-                value={tab.type}
-                active={selectTab === tab.type ? true : false}
-                onClick={() => {
-                  handleOnClick(tab.type)
-                }}
+            <li key={tab.type}>
+              <button
+                className={`${styles.link} text text_type_main-medium ${selectTab === tab.type ? styles.active : ''}`}
+                onClick={() => handleOnClick(tab.type)}
               >
                 {tab.name}
-              </Tab>
-            </div>
+              </button>
+            </li>
           ))}
         </ul>
       </nav>
-    </div>
+      <p className="text text_type_main-default text_color_inactive">
+        В этом разделе вы можете изменить свои персональные данные
+      </p>
+    </>
   )
 }

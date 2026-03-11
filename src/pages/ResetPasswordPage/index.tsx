@@ -1,4 +1,3 @@
-import { AppHeader } from '@/components/app-header/app-header'
 import { LinkModule } from '@/components/linkModule/linkModule'
 import {
   resetPassword,
@@ -47,32 +46,29 @@ export const ResetPasswordPage = (): React.JSX.Element => {
   }
 
   return (
-    <>
-      <AppHeader />
-      <main className={styles.main}>
-        <h2 className="text text_type_main-large">Восстановление пароля</h2>
-        <PasswordInput
-          placeholder="Введите новый пароль"
-          name="newPassword"
-          value={newPassword}
-          onChange={onChangeHandler}
-        />
-        <Input
-          type={'text'}
-          placeholder="Введите код из письма"
-          name="codeFromMail"
-          value={codeFromMail}
-          onChange={onChangeHandler}
-        />
-        <Button onClick={onClickHandler} size="medium" type="primary">
-          Сохранить
-        </Button>
-        <LinkModule
-          routePage={'/login'}
-          text={'Вспомнили пароль?'}
-          textLink={'Войти'}
-        />
-      </main>
-    </>
+    <main className={styles.main}>
+      <h2 className="text text_type_main-large">Восстановление пароля</h2>
+      <PasswordInput
+        placeholder="Введите новый пароль"
+        name="newPassword"
+        value={newPassword}
+        onChange={onChangeHandler}
+      />
+      <Input
+        type={'text'}
+        placeholder="Введите код из письма"
+        name="codeFromMail"
+        value={codeFromMail}
+        onChange={onChangeHandler}
+      />
+      <Button onClick={onClickHandler} size="medium" type="primary">
+        Сохранить
+      </Button>
+      <LinkModule
+        routePage={'/login'}
+        text={'Вспомнили пароль?'}
+        textLink={'Войти'}
+      />
+    </main>
   )
 }

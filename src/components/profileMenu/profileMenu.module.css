@@ -1,49 +1,32 @@
-.main {
-  display: flex;
-  justify-content: space-between;
-  width: 1240px;
-  height: 100%;
-  margin: 0 auto;
-  overflow: hidden;
+.menu {
+  width: 320px;
 }
 
-.app-container {
-  display: flex; /* Включаем flexbox */
-  min-height: 100vh; /* На всю высоту экрана */
-}
-
-.sidebar {
-  width: 250px; /* Ширина меню */
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-right: 1px solid #ddd;
-}
-
-.vertical-nav ul {
-  margin: 0;
+.list {
+  margin: 0 0 80px;
   padding: 0;
-  list-style: none; /* Убираем маркеры списка */
+  list-style: none;
 }
 
-.vertical-nav li {
-  margin-bottom: 15px; /* Отступ между пунктами */
+.link {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  color: #8585ad;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.25;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-.vertical-nav a {
-  display: block; /* Чтобы ссылка занимала всю ширину */
-  padding: 10px 15px;
-  color: #333;
-  font-size: 16px;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+.link:hover {
+  color: #f2f2f3;
 }
 
-.vertical-nav a:hover {
-  background-color: #e0e0e0;
-}
-
-.content {
-  flex: 1; /* Занимает всё оставшееся место */
-  padding: 20px;
+.active {
+  color: #f2f2f3;
 }

@@ -22,6 +22,9 @@ export type UserLogout = {
   success: boolean
   message: string
 }
+const getAccessToken = (): string | null => {
+  return localStorage.getItem('accessToken')
+}
 
 export async function authUser(
   userAuthData: UserAuthData
@@ -89,15 +92,16 @@ export async function logoutUser(token: string): Promise<UserLogout> {
 export async function userUpdateInfo(
   userUpdateInfo: UserRegistrationInfo
 ): Promise<UserInfo> {
+  const token = getAccessToken()
   try {
-    const response: AxiosResponse<UserInfo> = await api.patch(
-      '/auth/register',
-      {
-        email: userUpdateInfo.email,
-        name: userUpdateInfo.name,
-        password: userUpdateInfo.password,
-      }
-    )
+    const response: AxiosResponse<UserInfo> = await api.patch('/auth/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      email: userUpdateInfo.email,
+      name: userUpdateInfo.name,
+      password: userUpdateInfo.password,
+    })
     return response.data
   } catch (error) {
     alert(error)

@@ -1,4 +1,3 @@
-import { AppHeader } from '@/components/app-header/app-header'
 import { LinkModule } from '@/components/linkModule/linkModule'
 import { forgotPasswordAndReset } from '@/integration/forgotPasswordAndReset'
 import { Button, EmailInput } from '@krgaa/react-developer-burger-ui-components'
@@ -30,24 +29,21 @@ export const ForgotPasswordPage = (): React.JSX.Element => {
   }
 
   return (
-    <>
-      <AppHeader />
-      <main className={styles.main}>
-        <h2 className="text text_type_main-large">Восстановление пароля</h2>
-        <EmailInput
-          placeholder="E-mail"
-          value={email}
-          onChange={onChangeHandler}
-        />
-        <Button onClick={onClickHandler} size="medium" type="primary">
-          Восстановить
-        </Button>
-        <LinkModule
-          routePage={'/login'}
-          text={'Вспомнили пароль?'}
-          textLink={'Войти'}
-        />
-      </main>
-    </>
+    <main className={styles.main}>
+      <h2 className="text text_type_main-large">Восстановление пароля</h2>
+      <EmailInput
+        placeholder="E-mail"
+        value={email}
+        onChange={onChangeHandler}
+      />
+      <Button onClick={onClickHandler} size="medium" type="primary">
+        Восстановить
+      </Button>
+      <LinkModule
+        routePage={'/login'}
+        text={'Вспомнили пароль?'}
+        textLink={'Войти'}
+      />
+    </main>
   )
 }

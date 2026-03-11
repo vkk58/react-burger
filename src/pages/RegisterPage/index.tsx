@@ -1,4 +1,3 @@
-import { AppHeader } from '@/components/app-header/app-header'
 import { LinkModule } from '@/components/linkModule/linkModule'
 import { useAuth } from '@/hooks/useAuth'
 import { userReg } from '@/services/tasks/action'
@@ -54,33 +53,30 @@ export const RegisterPage = (): React.JSX.Element => {
   }
 
   return (
-    <>
-      <AppHeader />
-      <main className={styles.main}>
-        <h2 className="text text_type_main-large">Регистрация</h2>
-        <Input
-          type={'text'}
-          placeholder="Имя"
-          value={name}
-          name={'name'}
-          onChange={onChangeHandler}
-        />
-        <EmailInput value={email} name={'email'} onChange={onChangeHandler} />
-        <PasswordInput
-          icon="ShowIcon"
-          name={'password'}
-          value={password}
-          onChange={onChangeHandler}
-        />
-        <Button onClick={onSubmitHandler} size="medium" type="primary">
-          Зарегистрироваться
-        </Button>
-        <LinkModule
-          text={'Уже зарегистрировались?'}
-          textLink={'Войти'}
-          routePage={'/login'}
-        />
-      </main>
-    </>
+    <main className={styles.main}>
+      <h2 className="text text_type_main-large">Регистрация</h2>
+      <Input
+        type={'text'}
+        placeholder="Имя"
+        value={name}
+        name={'name'}
+        onChange={onChangeHandler}
+      />
+      <EmailInput value={email} name={'email'} onChange={onChangeHandler} />
+      <PasswordInput
+        icon="ShowIcon"
+        name={'password'}
+        value={password}
+        onChange={onChangeHandler}
+      />
+      <Button onClick={onSubmitHandler} size="medium" type="primary">
+        Зарегистрироваться
+      </Button>
+      <LinkModule
+        text={'Уже зарегистрировались?'}
+        textLink={'Войти'}
+        routePage={'/login'}
+      />
+    </main>
   )
 }

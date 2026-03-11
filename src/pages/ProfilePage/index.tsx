@@ -1,15 +1,17 @@
-import { AppHeader } from '@/components/app-header/app-header'
 import { ProfileMenu } from '@/components/profileMenu/profileMenu'
 import { Outlet } from 'react-router-dom'
 
-import type React from 'react'
+import styles from './styles.module.css'
 
 export const ProfilePage = (): React.JSX.Element => {
   return (
-    <>
-      <AppHeader />
-      <ProfileMenu />
-      <Outlet />
-    </>
+    <div className={styles.container}>
+      <div className={styles.menu}>
+        <ProfileMenu />
+      </div>
+      <div className={styles.content}>
+        <Outlet />
+      </div>
+    </div>
   )
 }

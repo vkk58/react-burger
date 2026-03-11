@@ -21,19 +21,16 @@ export const IngredientPage = (): React.JSX.Element => {
   const status = useSelector(selectIngredientsStatus)
   const error = useSelector(selectIngredientsError)
 
-  // Загружаем ингредиенты, если ещё не загружены
   useEffect(() => {
     if (status === 'idle') {
       dispatch(loadIngredientList())
     }
   }, [status, dispatch])
 
-  // Пока загружаются – показываем прелоадер
   if (status === 'loading') {
     return <Preloader />
   }
 
-  // Ошибка загрузки
   if (status === 'failed') {
     return (
       <div className="text text_type_main-large">Ошибка загрузки: {error}</div>

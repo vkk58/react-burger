@@ -77,11 +77,9 @@ export async function refreshUserTokens(token: string): Promise<UserTokens> {
 
 export async function logoutUser(token: string): Promise<UserLogout> {
   try {
-    console.log('token', token)
     const response: AxiosResponse<UserLogout> = await api.post('/auth/logout', {
       token: token,
     })
-    console.log('response.data', response.data)
     return response.data
   } catch (error) {
     console.error(error)

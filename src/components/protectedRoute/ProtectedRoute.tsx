@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom'
 
-// components/protected-route/protected-route.tsx
 import { useAuth } from '../../hooks/useAuth'
 
 import type React from 'react'

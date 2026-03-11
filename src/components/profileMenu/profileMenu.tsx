@@ -39,7 +39,6 @@ export const ProfileMenu = (): React.JSX.Element => {
         void navigate('/profile/orders')
         break
       case 'exit':
-        console.log('userRefreshToken', userRefreshToken)
         if (userRefreshToken)
           logoutUser(userRefreshToken)
             .then(() => {

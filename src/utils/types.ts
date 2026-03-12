@@ -20,3 +20,21 @@ export type TIngredient4BurgerConstructor = TIngredient & {
 export const IngredientItem = {
   INGREDIENT: 'ingredient',
 }
+
+export type UserInfo = {
+  email: string
+  name: string
+}
+
+export type UserTokens = {
+  success: boolean
+  accessToken: string
+  refreshToken: string
+}
+
+export type UserResponse = {
+  success: boolean
+  user: UserInfo
+  accessToken: string
+  refreshToken: string
+}

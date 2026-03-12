@@ -9,15 +9,14 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { AppHeader } from '@components/app-header/app-header'
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor'
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients'
 
 import type { AppDispatch } from '@/services/store'
 
-import styles from './app.module.css'
+import styles from './styles.module.css'
 
-export const App = (): React.JSX.Element => {
+export const Home = (): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>()
   const ingredientsStatus = useSelector(selectIngredientsStatus)
   const ingredientsError = useSelector(selectIngredientsError)
@@ -34,7 +33,6 @@ export const App = (): React.JSX.Element => {
 
   return (
     <div className={styles.app}>
-      <AppHeader />
       <h1
         className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}
       >
@@ -55,4 +53,3 @@ export const App = (): React.JSX.Element => {
     </div>
   )
 }
-export default App

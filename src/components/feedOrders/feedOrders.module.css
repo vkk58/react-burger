@@ -1,0 +1,34 @@
+.scrollContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: calc(100vh - 120px);
+  margin: 0;
+  padding: 16px;
+  overflow-y: auto;
+  list-style: none; /* убираем маркеры списка */
+}
+
+/* Кастомизация скроллбара (опционально) */
+
+.scrollContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollContainer::-webkit-scrollbar-track {
+  background: #2f2f37;
+  border-radius: 4px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: #8585ad;
+  border-radius: 4px;
+}
+
+.emptyMessage {
+  margin-top: 50px;
+  color: #8585ad;
+  font-size: 24px;
+  text-align: center;
+  list-style: none;
+}

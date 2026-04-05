@@ -38,3 +38,29 @@ export type UserResponse = {
   accessToken: string
   refreshToken: string
 }
+
+export type Orders = {
+  ingredients: string[]
+  _id: string
+  status: string
+  number: number
+  name: number
+  createdAt: string
+  updatedAt: string
+}
+
+export type OrderSocketResponse = {
+  ingredients: string[]
+  _id: string
+  status: string
+  number: number
+  createdAt: string
+  updatedAt: string
+}
+
+export type OrdersAllSocketResponse = {
+  orders: Orders[]
+  success: boolean
+  total: number
+  totalToday: number
+}

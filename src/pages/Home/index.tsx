@@ -14,7 +14,7 @@ import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredi
 
 import type { AppDispatch } from '@/services/store'
 
-import styles from './styles.module.css'
+import styles from './style.module.css'
 
 export const Home = (): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>()

@@ -37,7 +37,7 @@ const userTokensSlice = createSlice({
       })
       .addCase(userReg.fulfilled, (state, action) => {
         state.status = 'success'
-        state.accessToken = action.payload.accessToken
+        state.accessToken = action.payload.accessToken.replace('Bearer ', '')
         state.refreshToken = action.payload.refreshToken
       })
       .addCase(userReg.rejected, (state, action) => {
@@ -50,7 +50,7 @@ const userTokensSlice = createSlice({
       })
       .addCase(userAuth.fulfilled, (state, action) => {
         state.status = 'success'
-        state.accessToken = action.payload.accessToken
+        state.accessToken = action.payload.accessToken.replace('Bearer ', '')
         state.refreshToken = action.payload.refreshToken
       })
       .addCase(userAuth.rejected, (state, action) => {
@@ -63,7 +63,7 @@ const userTokensSlice = createSlice({
       })
       .addCase(userTokenRefresh.fulfilled, (state, action) => {
         state.status = 'success'
-        state.accessToken = action.payload.accessToken
+        state.accessToken = action.payload.accessToken.replace('Bearer ', '')
         state.refreshToken = action.payload.refreshToken
       })
       .addCase(userTokenRefresh.rejected, (state, action) => {

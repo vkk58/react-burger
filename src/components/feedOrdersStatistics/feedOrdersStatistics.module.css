@@ -1,0 +1,60 @@
+.statusPanel {
+  display: flex;
+  flex: 0 0 580px;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.statusColumns {
+  display: flex;
+  gap: 36px;
+}
+
+.statusGroup {
+  flex: 1;
+}
+
+.columnsContainer {
+  display: flex;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.column {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.orderNumber {
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-family: 'Iceland', monospace;
+  line-height: 1.2;
+}
+
+.done {
+  color: #0cc;
+}
+
+/* Статистика */
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.total,
+.today {
+  text-shadow: 0 0 16px rgb(51 51 255 / 25%);
+}
+
+.total {
+  color: #f2f2f3;
+}
+
+.today {
+  color: #f2f2f3;
+}

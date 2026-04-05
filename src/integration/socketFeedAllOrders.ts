@@ -20,6 +20,7 @@ const socketAllOrdersMiddleware: Middleware = (store) => (next) => (action) => {
       (ws.readyState === WebSocket.OPEN ||
         ws.readyState === WebSocket.CONNECTING)
     ) {
+      console.log('socketOrderAll/connect')
       return next(action)
     }
     ws = new WebSocket(`${URL_SOCKET}/orders/all`)
@@ -45,20 +46,14 @@ const socketAllOrdersMiddleware: Middleware = (store) => (next) => (action) => {
         store.dispatch(onError())
       }
     }
-
-    // Обработчик ошибок
     ws.onerror = (): void => {
       store.dispatch(onError('Ошибка WebSocket-соединения'))
     }
-
-    // Обработчик закрытия соединения
     ws.onclose = (): void => {
       store.dispatch(onClose())
       ws = null
     }
   }
-
-  // Обработка экшена disconnect
   if (type === 'socketOrderAll/disconnect') {
     console.log('wsClose')
     if (ws) {

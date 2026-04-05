@@ -49,15 +49,6 @@ export type Orders = {
   updatedAt: string
 }
 
-export type OrderSocketResponse = {
-  ingredients: string[]
-  _id: string
-  status: string
-  number: number
-  createdAt: string
-  updatedAt: string
-}
-
 export type OrdersAllSocketResponse = {
   orders: Orders[]
   success: boolean

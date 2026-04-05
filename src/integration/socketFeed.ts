@@ -6,7 +6,7 @@ import {
 } from '@/services/tasks/ordersFeedSocketSlice'
 import { URL_SOCKET } from '@/utils/constants'
 
-import type { OrderFeedSocketResponse } from '@/utils/types'
+import type { OrdersAllSocketResponse } from '@/utils/types'
 import type { Middleware, PayloadAction } from '@reduxjs/toolkit'
 
 let ws: WebSocket | null = null
@@ -16,12 +16,16 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
 
   if (type === 'socket/connect') {
     const { payload: token } = action as PayloadAction<string>
-    console.log('token ; ', token)
-    if (ws) {
-      ws.close()
+    if (
+      ws &&
+      (ws.readyState === WebSocket.OPEN ||
+        ws.readyState === WebSocket.CONNECTING)
+    ) {
+      console.log('socket/connect', ws)
+      return next(action)
     }
 
-    ws = new WebSocket(`${URL_SOCKET}orders?token=Bearer%20${token}`)
+    ws = new WebSocket(`${URL_SOCKET}/orders?token=${token}`)
 
     ws.onopen = (): void => {
       store.dispatch(onOpen())
@@ -34,11 +38,11 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
       }
 
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const data = JSON.parse(
           event.data
-        ) as unknown as OrderFeedSocketResponse
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ) as unknown as OrdersAllSocketResponse
+
+        console.log('onmessage', data)
         store.dispatch(onMessage(data))
       } catch (error: unknown) {
         const errorMessage =
@@ -67,7 +71,9 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
   }
 
   if (type === 'socket/disconnect') {
-    if (ws) {
+    console.log('wsClose')
+    console.log('ws.readyState', ws?.readyState)
+    if (ws && ws.readyState === WebSocket.OPEN) {
       ws.close()
       ws = null
     }

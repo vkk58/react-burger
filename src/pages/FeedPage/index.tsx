@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import {
   connect,
   disconnect,
+  selectAllOrders,
   selectIsConnected,
   selectIsLoading,
 } from '@/services/tasks/ordersFeedAllSocketSlice'
@@ -15,6 +16,7 @@ import styles from './styles.module.css'
 const FeedPage = (): React.JSX.Element => {
   const isLoading = useAppSelector(selectIsLoading)
   const isConnected = useAppSelector(selectIsConnected)
+  const messages = useAppSelector(selectAllOrders)
   const dispatch = useAppDispatch()
   const isCleanupScheduled = useRef(false)
   useEffect(() => {
@@ -42,7 +44,7 @@ const FeedPage = (): React.JSX.Element => {
         Лента заказов
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
-        <FeedOrders />
+        <FeedOrders messages={messages} />
         <FeedOrdersStatistics />
       </main>
     </div>

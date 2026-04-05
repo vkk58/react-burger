@@ -1,15 +1,14 @@
-import { useAppSelector } from '@/hooks/socketHooks'
-import { selectAllOrders } from '@/services/tasks/ordersFeedAllSocketSlice'
-
 import { OrderBox } from '../OrderBox/orderBox'
 
-import type { Orders } from '@/utils/types'
+import type { Orders, OrdersAllSocketResponse } from '@/utils/types'
 
 import styles from './feedOrders.module.css'
 
-function FeedOrders(): React.JSX.Element {
-  const messages = useAppSelector(selectAllOrders)
-
+function FeedOrders({
+  messages,
+}: {
+  messages: OrdersAllSocketResponse | null
+}): React.JSX.Element {
   const orders = messages?.orders ?? []
 
   return (

@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { OrderSocketResponse } from '@/utils/types'
+import type { RootState } from '../store'
+import type { OrdersAllSocketResponse } from '@/utils/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 type SocketState = {
   isConnected: boolean
-  messages: OrderSocketResponse[]
+  messages: OrdersAllSocketResponse | null
   error: string | null
   isLoading: boolean
 }
@@ -13,7 +14,7 @@ type SocketState = {
 // Начальное состояние
 const initialState: SocketState = {
   isConnected: false,
-  messages: [],
+  messages: null,
   error: null,
   isLoading: false,
 }
@@ -29,12 +30,8 @@ const feedOrdersSocketSlice = createSlice({
     },
     disconnect: (state) => {
       state.isConnected = false
-      state.messages = []
+      state.messages = null
       state.isLoading = false
-    },
-    sendMessage: (state, action: PayloadAction) => {
-      state.isConnected = true
-      state.messages.push(action.payload)
     },
     // Событийные редьюсеры
     onOpen: (state) => {
@@ -43,7 +40,7 @@ const feedOrdersSocketSlice = createSlice({
       state.error = null
     },
     onMessage: (state, action: PayloadAction) => {
-      state.messages.push(action.payload)
+      state.messages = action.payload
     },
     onError: (state, action: PayloadAction) => {
       state.error = action.payload ?? ''
@@ -66,6 +63,15 @@ export const {
   onError,
   onClose,
 } = feedOrdersSocketSlice.actions
+
+export const selectIsConnectedForCurrentUser = (state: RootState): boolean =>
+  state.feedOrdersSocketSlice.isConnected
+export const selectIsLoadingForCurrentUser = (state: RootState): boolean =>
+  state.feedOrdersSocketSlice.isLoading
+
+export const selectOrdersForCurrentUser = (
+  state: RootState
+): OrdersAllSocketResponse => state.feedOrdersSocketSlice.messages
 
 // Экспортируем редьюсер (его мы позже подключим к store)
 export default feedOrdersSocketSlice.reducer

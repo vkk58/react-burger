@@ -11,6 +11,9 @@ import {
 } from '@/integration/userData'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
+import { getUserAccessToken } from './userTokensSlice'
+
+import type { RootState } from '../store'
 import type { TIngredient4BurgerConstructor } from '@/utils/types'
 
 export const loadIngredientList = createAsyncThunk(
@@ -22,8 +25,11 @@ export const loadIngredientList = createAsyncThunk(
 
 export const createOrder = createAsyncThunk(
   'createOrder',
-  async (orderArray: TIngredient4BurgerConstructor[]) => {
-    return sendOrder(orderArray)
+  async (orderArray: TIngredient4BurgerConstructor[], { getState }) => {
+    const state = getState() as RootState
+    const token = getUserAccessToken(state)
+    console.log('sendOrder:', token)
+    return sendOrder(orderArray, token)
   }
 )
 

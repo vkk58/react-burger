@@ -21,7 +21,6 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
       (ws.readyState === WebSocket.OPEN ||
         ws.readyState === WebSocket.CONNECTING)
     ) {
-      console.log('socket/connect', ws)
       return next(action)
     }
 
@@ -42,7 +41,6 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
           event.data
         ) as unknown as OrdersAllSocketResponse
 
-        console.log('onmessage', data)
         store.dispatch(onMessage(data))
       } catch (error: unknown) {
         const errorMessage =
@@ -71,8 +69,6 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
   }
 
   if (type === 'socket/disconnect') {
-    console.log('wsClose')
-    console.log('ws.readyState', ws?.readyState)
     if (ws && ws.readyState === WebSocket.OPEN) {
       ws.close()
       ws = null

@@ -14,18 +14,23 @@ export const AppHeader = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState('')
 
   useEffect(() => {
+    console.log('app-header', location.pathname)
     switch (location.pathname) {
       case '/profile':
       case '/profile/orders':
+        console.log('setCurrentPage', 'profile')
         setCurrentPage('profile')
         break
       case '/':
+        console.log('setCurrentPage', 'home')
         setCurrentPage('home')
         break
       case '/feed':
+        console.log('setCurrentPage', 'feed')
         setCurrentPage('feed')
         break
       default:
+        console.log('setCurrentPage', '')
         setCurrentPage('')
     }
   }, [location.pathname])

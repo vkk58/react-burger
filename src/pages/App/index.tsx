@@ -13,6 +13,7 @@ import { Home } from '../Home'
 import { IngredientPage } from '../IngredientPage'
 import { LoginPage } from '../LoginPage'
 import { NotFoundPage } from '../NotFoundPage'
+import { OrderBoxDetailsPage } from '../OrderBoxDetailsPage'
 import { ProfilePage } from '../ProfilePage'
 import { RegisterPage } from '../RegisterPage'
 import { ResetPasswordPage } from '../ResetPasswordPage'
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: 'ingredients/:id',
         element: <IngredientPage />,
+      },
+      {
+        path: 'feed/:id',
+        element: <OrderBoxDetailsPage />,
       },
       {
         path: '/register',
@@ -81,8 +86,18 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        path: 'profile/orders/:id',
+        element: <OrderBoxDetailsPage />,
+      },
+      {
         path: '/feed',
         element: <FeedPage />,
+        children: [
+          {
+            path: ':id',
+            element: <OrderBoxDetailsPage />,
+          },
+        ],
       },
       {
         path: '*',

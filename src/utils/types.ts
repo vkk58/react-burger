@@ -49,6 +49,11 @@ export type Orders = {
   updatedAt: string
 }
 
+export type OrderResponse = {
+  order: Orders
+  success: boolean
+}
+
 export type OrdersAllSocketResponse = {
   orders: Orders[]
   success: boolean

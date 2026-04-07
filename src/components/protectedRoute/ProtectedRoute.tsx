@@ -15,7 +15,7 @@ export const ProtectedRoute = ({
 }: ProtectedRouteProps): React.JSX.Element => {
   const isUserAuth = useAuth()
   const location = useLocation()
-
+  console.log('isUserAuth, valueForRedirect', isUserAuth, valueForRedirect)
   if (isUserAuth === valueForRedirect) {
     return <>{children}</>
   } else if (isUserAuth === true) {

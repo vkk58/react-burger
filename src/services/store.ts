@@ -3,6 +3,7 @@ import socketAllOrdersMiddleware from '@/integration/socketFeedAllOrders'
 import { configureStore } from '@reduxjs/toolkit'
 
 import ingredientsReducer from './tasks/ingredientSlice'
+import orderDetailsSlice from './tasks/orderDetailsSlice'
 import feedOrdersAllSocketSlice from './tasks/ordersFeedAllSocketSlice'
 import feedOrdersSocketSlice from './tasks/ordersFeedSocketSlice'
 import ingredientsOrder from './tasks/orderSlice'
@@ -19,6 +20,7 @@ export const store = configureStore({
     userTokens: userTokens,
     feedOrdersSocketSlice: feedOrdersSocketSlice,
     feedOrdersAllSocketSlice: feedOrdersAllSocketSlice,
+    orderDetailsSlice: orderDetailsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(socketMiddleware, socketAllOrdersMiddleware),

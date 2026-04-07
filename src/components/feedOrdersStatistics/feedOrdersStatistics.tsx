@@ -30,8 +30,6 @@ function FeedOrdersStatistics(): React.JSX.Element {
     return <Preloader />
   }
 
-  console.log('messages', messages)
-
   const allOrders = messages.orders ?? []
 
   const doneOrders = allOrders.filter((order) => order.status === 'done')

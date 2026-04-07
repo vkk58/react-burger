@@ -1,4 +1,5 @@
 import { checkUserAuth } from '@/integration/checkUser'
+import { getOrderDetails } from '@/integration/getOrderDetails'
 import { getIngredients } from '@/integration/ingredients'
 import { sendOrder } from '@/integration/sendOrder'
 import {
@@ -28,7 +29,6 @@ export const createOrder = createAsyncThunk(
   async (orderArray: TIngredient4BurgerConstructor[], { getState }) => {
     const state = getState() as RootState
     const token = getUserAccessToken(state)
-    console.log('sendOrder:', token)
     return sendOrder(orderArray, token)
   }
 )
@@ -69,5 +69,12 @@ export const checkUserAuthThunk = createAsyncThunk(
       return rejectWithValue('Не удалось проверить авторизацию')
     }
     return result.user
+  }
+)
+
+export const getOrderDetailsThunk = createAsyncThunk(
+  'orderDetails',
+  async (orderId: string) => {
+    return getOrderDetails(orderId)
   }
 )

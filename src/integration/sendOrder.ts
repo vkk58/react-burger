@@ -19,7 +19,6 @@ export async function sendOrder(
 ): Promise<OrderResponse> {
   try {
     const idArray = order.map((item) => item._id)
-    console.log('Bearer', token)
     api.defaults.headers.common.Authorization = `Bearer ${token}`
     const response: AxiosResponse<OrderResponse> = await api.post('/orders', {
       ingredients: idArray,

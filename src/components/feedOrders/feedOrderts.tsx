@@ -1,3 +1,8 @@
+import { loadIngredientList } from '@/services/tasks/action'
+import { selectIngredientsStatus } from '@/services/tasks/ingredientSlice'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { OrderBox } from '../OrderBox/orderBox'
 
 import type { Orders, OrdersAllSocketResponse } from '@/utils/types'
@@ -9,6 +14,15 @@ function FeedOrders({
 }: {
   messages: OrdersAllSocketResponse | null
 }): React.JSX.Element {
+  const ingredientsStatus = useSelector(selectIngredientsStatus)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (ingredientsStatus === 'idle') {
+      dispatch(loadIngredientList())
+    }
+  }, [ingredientsStatus, dispatch])
   const orders = messages?.orders ?? []
 
   return (

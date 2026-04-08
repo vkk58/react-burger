@@ -43,26 +43,23 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const orderStatus = useAppSelector(getOrderStatus)
   const orderError = useAppSelector(getOrderError)
   const orderNumber = useAppSelector(getOrderNumber)
-  const isUserAuth = useAuth()
+  const { isUserAuth, isLoading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
   const currentOrderSum = useAppSelector(orderSum)
 
-  // Сохранение/восстановление отложенного заказа
   const PENDING_ORDER_KEY = 'pendingOrder'
 
   const sendOrder = (): void => {
-    if (!isUserAuth) {
-      // Сохраняем заказ в sessionStorage (или localStorage)
+    if (!isUserAuth || isLoading) {
       sessionStorage.setItem(PENDING_ORDER_KEY, JSON.stringify(orderArray))
-      void navigate('/login', { state: { from: location.pathname } }) // переход на страницу логина
+      void navigate('/login', { state: { from: location.pathname } })
       return
     }
     void dispatch(createOrder(orderArray))
   }
 
-  // Автоматическая отправка сохранённого заказа после логина
   useEffect(() => {
     const pendingOrderJson = sessionStorage.getItem(PENDING_ORDER_KEY)
     if (pendingOrderJson && isUserAuth) {
@@ -70,14 +67,11 @@ export const BurgerConstructor = (): React.JSX.Element => {
         pendingOrderJson
       ) as TIngredient4BurgerConstructor[]
       sessionStorage.removeItem(PENDING_ORDER_KEY)
-      // Восстанавливаем заказ в store (если он был очищен)
       if (pendingOrder.length > 0) {
-        // Если заказ пуст, можно не восстанавливать
         pendingOrder.forEach((ingredient) => {
           dispatch(addIngredient2Order(ingredient))
         })
       }
-      // Отправляем восстановленный заказ
       void dispatch(createOrder(pendingOrder))
     }
   }, [dispatch])

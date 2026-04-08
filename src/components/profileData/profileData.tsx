@@ -50,42 +50,51 @@ export const ProfileData = (): React.JSX.Element => {
 
   return (
     <main className={stylesLocal.main}>
-      <Input
-        name="name"
-        type={'text'}
-        placeholder="Имя"
-        icon="EditIcon"
-        value={name}
-        onChange={onChangeHandler}
-      />
-      <EmailInput
-        name="email"
-        value={email}
-        onChange={onChangeHandler}
-        icon="EditIcon"
-      />
-      <Input
-        name="password"
-        placeholder="Пароль"
-        icon="EditIcon"
-        value={password}
-        onChange={onChangeHandler}
-        errorText={updError}
-      />
-      {(userInfoOrig?.email !== email || userInfoOrig?.name !== name) && (
-        <footer className={stylesLocal.footerContainer}>
-          <Button onClick={onClickUserUpdHandler} size="medium" type="primary">
-            Сохранить
-          </Button>
-          <Button
-            onClick={onClickCancelUserUpdHandler}
-            size="medium"
-            type="primary"
-          >
-            Отмена
-          </Button>
-        </footer>
-      )}
+      <form>
+        <Input
+          name="name"
+          type={'text'}
+          placeholder="Имя"
+          icon="EditIcon"
+          value={name}
+          onChange={onChangeHandler}
+          extraClass="mb-6"
+        />
+        <EmailInput
+          name="email"
+          value={email}
+          onChange={onChangeHandler}
+          icon="EditIcon"
+          extraClass="mb-6"
+        />
+        <Input
+          name="password"
+          placeholder="Пароль"
+          icon="EditIcon"
+          value={password}
+          onChange={onChangeHandler}
+          errorText={updError}
+          extraClass="mb-6"
+        />
+        {(userInfoOrig?.email !== email || userInfoOrig?.name !== name) && (
+          <footer className={stylesLocal.footerContainer}>
+            <Button
+              onClick={onClickUserUpdHandler}
+              size="medium"
+              type="primary"
+            >
+              Сохранить
+            </Button>
+            <Button
+              onClick={onClickCancelUserUpdHandler}
+              size="medium"
+              type="primary"
+            >
+              Отмена
+            </Button>
+          </footer>
+        )}
+      </form>
     </main>
   )
 }

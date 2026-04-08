@@ -51,7 +51,6 @@ const feedOrdersSocketSlice = createSlice({
   },
 })
 
-// Экспортируем экшены
 export const {
   connect,
   disconnect,
@@ -70,5 +69,4 @@ export const selectIsLoading = (state: RootState): boolean =>
 export const selectOrders = (state: RootState): OrdersAllSocketResponse =>
   state.feedOrdersSocketSlice.messages
 
-// Экспортируем редьюсер (его мы позже подключим к store)
 export default feedOrdersSocketSlice.reducer

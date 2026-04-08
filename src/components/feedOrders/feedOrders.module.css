@@ -6,10 +6,8 @@
   margin: 0;
   padding: 16px;
   overflow-y: auto;
-  list-style: none; /* убираем маркеры списка */
+  list-style: none;
 }
-
-/* Кастомизация скроллбара (опционально) */
 
 .scrollContainer::-webkit-scrollbar {
   width: 8px;

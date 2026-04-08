@@ -25,7 +25,6 @@ const feedOrdersSocketSlice = createSlice({
     connect: (state, _action: PayloadAction<{ url: string }>) => {
       state.isLoading = true
       state.error = null
-      console.log('_action', _action)
     },
     disconnect: (state) => {
       state.isConnected = false

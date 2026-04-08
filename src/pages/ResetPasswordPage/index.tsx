@@ -22,7 +22,6 @@ export const ResetPasswordPage = (): React.JSX.Element => {
 
   useEffect(() => {
     const isAllowed = localStorage.getItem('resetPasswordAllowed')
-    console.log('isAllowed', isAllowed)
     if (isAllowed !== 'true') {
       void navigate('/login', { replace: true })
     }

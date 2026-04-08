@@ -22,7 +22,6 @@ const FeedPage = (): React.JSX.Element => {
   const isCleanupScheduled = useRef(false)
   useEffect(() => {
     if (!isCleanupScheduled.current) {
-      console.log('URL_SOCKET connect', `${URL_SOCKET}/orders/all`)
       dispatch(connect(`${URL_SOCKET}/orders/all`))
       isCleanupScheduled.current = true
     }

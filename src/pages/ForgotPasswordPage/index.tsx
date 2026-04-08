@@ -21,7 +21,6 @@ export const ForgotPasswordPage = (): React.JSX.Element => {
     e.preventDefault()
     forgotPasswordAndReset(email)
       .then(() => {
-        console.log('BAM')
         localStorage.setItem('resetPasswordAllowed', 'true')
         void navigate('/reset-password')
       })

@@ -5,8 +5,11 @@ import {
   Counter,
   CurrencyIcon,
 } from '@krgaa/react-developer-burger-ui-components'
+import { useState } from 'react'
 import { useDrag, type DragSourceMonitor } from 'react-dnd'
-import { useLocation, useNavigate } from 'react-router-dom'
+
+import { IngredientDetails } from '../ingredientDetails/ingredientDetails'
+import { Modal } from '../modal/modal'
 
 import type { RootState } from '@/services/store'
 
@@ -18,8 +21,8 @@ type TIngredientBoxProps = {
 export const IngredientBox = ({
   ingredient,
 }: TIngredientBoxProps): React.JSX.Element => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const [isModalVisible, setModalVisible] = useState(false)
+  const [modalData, setModaldata] = useState<React.JSX.Element>(null)
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: IngredientItem.INGREDIENT,
@@ -37,30 +40,39 @@ export const IngredientBox = ({
   )
 
   const handleOnClick = (): void => {
-    void navigate(`/ingredients/${ingredient._id}`, {
-      state: { background: location },
-    })
+    const modalContent = <IngredientDetails ingredient={ingredient} />
+    setModaldata(modalContent)
+    setModalVisible(true)
+  }
+
+  const handleCloseModal = (): void => {
+    setModalVisible(false)
   }
 
   return (
-    <article
-      ref={dragRef as unknown as React.RefObject<HTMLElement>}
-      className={styles.ingredientBox}
-      style={{ opacity }}
-      id={ingredient._id}
-      onClick={handleOnClick}
-    >
-      <img src={ingredient.image} alt={ingredient.name}></img>
-      <div className={styles.priceContainer}>
-        <div className="text text_type_main-small">{ingredient.price}</div>
-        <CurrencyIcon type="primary" />
-      </div>
-      <div className="text text_type_main-small">{ingredient.name}</div>
-      {counter > 0 ? (
-        <Counter count={counter} size="small" extraClass={styles.counter} />
-      ) : (
-        <></>
+    <>
+      <article
+        ref={dragRef as unknown as React.RefObject<HTMLElement>}
+        className={styles.ingredientBox}
+        style={{ opacity }}
+        id={ingredient._id}
+        onClick={handleOnClick}
+      >
+        <img src={ingredient.image} alt={ingredient.name}></img>
+        <div className={styles.priceContainer}>
+          <div className="text text_type_main-small">{ingredient.price}</div>
+          <CurrencyIcon type="primary" />
+        </div>
+        <div className="text text_type_main-small">{ingredient.name}</div>
+        {counter > 0 ? (
+          <Counter count={counter} size="small" extraClass={styles.counter} />
+        ) : (
+          <></>
+        )}
+      </article>
+      {isModalVisible && (
+        <Modal setModalVisible={handleCloseModal} modalData={modalData} />
       )}
-    </article>
+    </>
   )
 }

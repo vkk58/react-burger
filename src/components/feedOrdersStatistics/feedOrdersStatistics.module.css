@@ -38,8 +38,6 @@
   color: #0cc;
 }
 
-/* Статистика */
-
 .stats {
   display: flex;
   flex-direction: column;

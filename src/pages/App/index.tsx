@@ -121,5 +121,6 @@ export default function App(): React.JSX.Element {
   useEffect(() => {
     void dispatch(checkUserAuthThunk())
   }, [dispatch])
+
   return <RouterProvider router={router} />
 }

@@ -11,8 +11,10 @@ import {
   type UserRegistrationInfo,
 } from '@/integration/userData'
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import axios from 'axios'
 
-import { getUserAccessToken } from './userTokensSlice'
+import { clearUserData } from './userInfoSlice'
+import { clearTokens, getUserAccessToken } from './userTokensSlice'
 
 import type { RootState } from '../store'
 import type { TIngredient4BurgerConstructor } from '@/utils/types'
@@ -63,12 +65,29 @@ export const userUpd = createAsyncThunk(
 
 export const checkUserAuthThunk = createAsyncThunk(
   'checkUser',
-  async (_, { rejectWithValue }) => {
-    const result = await checkUserAuth()
-    if (!result.success) {
-      return rejectWithValue('Не удалось проверить авторизацию')
+  async (_, { dispatch, rejectWithValue, getState }) => {
+    try {
+      const result = await checkUserAuth()
+      return result.user
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        const state = getState() as RootState
+        const refreshToken = state.userTokens.refreshToken
+        if (!refreshToken) {
+          return rejectWithValue('Нет refresh токена')
+        }
+        try {
+          await dispatch(userTokenRefresh(refreshToken)).unwrap()
+          const retryResult = await checkUserAuth()
+          return retryResult.user
+        } catch (refreshError) {
+          dispatch(clearTokens())
+          dispatch(clearUserData())
+          return rejectWithValue(refreshError)
+        }
+      }
+      return rejectWithValue(error)
     }
-    return result.user
   }
 )
 

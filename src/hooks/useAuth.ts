@@ -1,8 +1,14 @@
 import { useAppSelector } from '@/hooks/socketHooks'
-import { getUserInfo } from '@/services/tasks/userInfoSlice'
+import { getUserInfo, getUserInfoStatus } from '@/services/tasks/userInfoSlice'
 
-export const useAuth = (): boolean => {
+type UseAuthResponseType = { isUserAuth: boolean; isLoading: boolean }
+
+export const useAuth = (): UseAuthResponseType => {
   const userInfo = useAppSelector(getUserInfo)
-  console.log('userInfo', userInfo)
-  return userInfo !== null
+  const status = useAppSelector(getUserInfoStatus)
+
+  const isUserAuth = !!userInfo
+  const isLoading = status === 'loading'
+
+  return { isUserAuth, isLoading }
 }

@@ -12,8 +12,8 @@ export type userTokensState = {
 }
 
 const initialState: userTokensState = {
-  accessToken: '',
-  refreshToken: '',
+  accessToken: localStorage.getItem('accessToken') ?? '',
+  refreshToken: localStorage.getItem('refreshToken') ?? '',
   status: 'idle',
   error: '',
 }
@@ -27,6 +27,8 @@ const userTokensSlice = createSlice({
       state.refreshToken = ''
       state.status = 'idle'
       state.error = ''
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
     },
   },
   extraReducers: (builder) => {
@@ -39,6 +41,8 @@ const userTokensSlice = createSlice({
         state.status = 'success'
         state.accessToken = action.payload.accessToken.replace('Bearer ', '')
         state.refreshToken = action.payload.refreshToken
+        localStorage.setItem('accessToken', state.accessToken)
+        localStorage.setItem('refreshToken', state.refreshToken)
       })
       .addCase(userReg.rejected, (state, action) => {
         state.status = 'error'
@@ -52,6 +56,8 @@ const userTokensSlice = createSlice({
         state.status = 'success'
         state.accessToken = action.payload.accessToken.replace('Bearer ', '')
         state.refreshToken = action.payload.refreshToken
+        localStorage.setItem('accessToken', state.accessToken)
+        localStorage.setItem('refreshToken', state.refreshToken)
       })
       .addCase(userAuth.rejected, (state, action) => {
         state.status = 'error'
@@ -65,6 +71,8 @@ const userTokensSlice = createSlice({
         state.status = 'success'
         state.accessToken = action.payload.accessToken.replace('Bearer ', '')
         state.refreshToken = action.payload.refreshToken
+        localStorage.setItem('accessToken', state.accessToken)
+        localStorage.setItem('refreshToken', state.refreshToken)
       })
       .addCase(userTokenRefresh.rejected, (state, action) => {
         state.status = 'error'

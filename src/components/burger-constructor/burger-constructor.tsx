@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import { createOrder } from '@/services/tasks/action'
 import {
   addIngredient2Order,
@@ -17,7 +18,6 @@ import {
 } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { useDispatch, useSelector } from 'react-redux'
 
 import {
   type TIngredient,
@@ -32,16 +32,16 @@ import { OrderDetails } from '../OrderDetails/OrderDetails'
 import styles from './burger-constructor.module.css'
 
 export const BurgerConstructor = (): React.JSX.Element => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [isModalVisible, setModalVisible] = useState(false)
-  const orderArray = useSelector(currentOrder)
+  const orderArray = useAppSelector(currentOrder)
   const orderArrayLength = orderArray.length - 1
   const [modalData, setModaldata] = useState<React.JSX.Element>(null)
-  const orderStatus = useSelector(getOrderStatus)
-  const orderError = useSelector(getOrderError)
-  const orderNumber = useSelector(getOrderNumber)
+  const orderStatus = useAppSelector(getOrderStatus)
+  const orderError = useAppSelector(getOrderError)
+  const orderNumber = useAppSelector(getOrderNumber)
 
-  const currentOrderSum = useSelector(orderSum)
+  const currentOrderSum = useAppSelector(orderSum)
 
   const sendOrder = (): void => {
     void dispatch(createOrder(orderArray))

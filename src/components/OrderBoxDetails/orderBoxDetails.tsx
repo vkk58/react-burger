@@ -1,11 +1,6 @@
-import {
-  getOrderDetailsThunk,
-  loadIngredientList,
-} from '@/services/tasks/action'
-import {
-  selectAllIngredients,
-  selectIngredientsStatus,
-} from '@/services/tasks/ingredientSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
+import { getOrderDetailsThunk } from '@/services/tasks/action'
+import { selectAllIngredients } from '@/services/tasks/ingredientSlice'
 import {
   clearOrderDetails,
   getOrderDetailsSlice,
@@ -18,7 +13,6 @@ import {
   Preloader,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './orderBoxDetails.module.css'
 
@@ -29,22 +23,15 @@ type OrderBoxDetailsProps = {
 export const OrderBoxDetails = ({
   orderId,
 }: OrderBoxDetailsProps): React.JSX.Element => {
-  const dispatch = useDispatch()
-  const ingredientList = useSelector(selectAllIngredients)
-  const ingredientsStatus = useSelector(selectIngredientsStatus)
-  const order = useSelector(getOrderDetailsSlice)
-  const status = useSelector(getOrderDetailsSliceStatus)
-  const error = useSelector(getOrderDetailsSliceError)
-
-  useEffect(() => {
-    if (ingredientsStatus === 'idle') {
-      dispatch(loadIngredientList())
-    }
-  }, [ingredientsStatus, dispatch])
+  const dispatch = useAppDispatch()
+  const ingredientList = useAppSelector(selectAllIngredients)
+  const order = useAppSelector(getOrderDetailsSlice)
+  const status = useAppSelector(getOrderDetailsSliceStatus)
+  const error = useAppSelector(getOrderDetailsSliceError)
 
   useEffect(() => {
     dispatch(clearOrderDetails())
-    dispatch(getOrderDetailsThunk(orderId))
+    void dispatch(getOrderDetailsThunk(orderId))
 
     return (): void => {
       dispatch(clearOrderDetails())

@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks/socketHooks'
 import { countIngredient } from '@/services/tasks/orderSlice'
 import { IngredientItem, type TIngredient } from '@/utils/types'
 import {
@@ -5,7 +6,6 @@ import {
   CurrencyIcon,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useDrag, type DragSourceMonitor } from 'react-dnd'
-import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import type { RootState } from '@/services/store'
@@ -32,7 +32,7 @@ export const IngredientBox = ({
   )
   const opacity = isDragging ? 0.4 : 1
 
-  const counter = useSelector((state: RootState) =>
+  const counter = useAppSelector((state: RootState) =>
     countIngredient(state, ingredient._id)
   )
 

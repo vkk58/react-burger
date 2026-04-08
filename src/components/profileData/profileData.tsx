@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import { userUpd } from '@/services/tasks/action'
 import { getUserInfo, getUserInfoError } from '@/services/tasks/userInfoSlice'
 import {
@@ -6,7 +7,6 @@ import {
   Input,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import type { UserRegistrationInfo } from '@/integration/userData'
 import type React from 'react'
@@ -14,12 +14,12 @@ import type React from 'react'
 import stylesLocal from './profileData.module.css'
 
 export const ProfileData = (): React.JSX.Element => {
-  const userInfo = useSelector(getUserInfo)
+  const userInfo = useAppSelector(getUserInfo)
   const [name, setName] = useState(userInfo?.name)
   const [email, setEmail] = useState(userInfo?.email)
   const [password, setPassword] = useState('')
-  const dispatch = useDispatch()
-  const updError = useSelector(getUserInfoError)
+  const dispatch = useAppDispatch()
+  const updError = useAppSelector(getUserInfoError)
   const userInfoOrig = userInfo
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {

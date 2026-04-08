@@ -1,8 +1,8 @@
+import { useAppSelector } from '@/hooks/socketHooks'
 import { getUserInfo } from '@/services/tasks/userInfoSlice'
-import { useSelector } from 'react-redux'
 
 export const useAuth = (): boolean => {
-  const userInfo = useSelector(getUserInfo)
+  const userInfo = useAppSelector(getUserInfo)
   console.log('userInfo', userInfo)
   return userInfo !== null
 }

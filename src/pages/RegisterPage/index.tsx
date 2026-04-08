@@ -1,4 +1,5 @@
 import { LinkModule } from '@/components/linkModule/linkModule'
+import { useAppDispatch } from '@/hooks/socketHooks'
 import { useAuth } from '@/hooks/useAuth'
 import { userReg } from '@/services/tasks/action'
 import {
@@ -8,7 +9,6 @@ import {
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import type { UserRegistrationInfo } from '@/integration/userData'
@@ -20,7 +20,7 @@ export const RegisterPage = (): React.JSX.Element => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const isUserAuth = useAuth()
 

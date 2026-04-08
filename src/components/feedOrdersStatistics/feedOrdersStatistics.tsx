@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/hooks/socketHooks'
-import { selectAllOrders } from '@/services/tasks/ordersFeedAllSocketSlice'
+import { selectOrders } from '@/services/tasks/createSocketSlice'
 import { Preloader } from '@krgaa/react-developer-burger-ui-components'
 
 import type { Orders } from '@/utils/types'
@@ -24,7 +24,7 @@ const splitIntoColumns = (
 }
 
 function FeedOrdersStatistics(): React.JSX.Element {
-  const messages = useAppSelector(selectAllOrders)
+  const messages = useAppSelector(selectOrders)
 
   if (!messages) {
     return <Preloader />

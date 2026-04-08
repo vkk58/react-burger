@@ -4,10 +4,11 @@ import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import {
   connect,
   disconnect,
-  selectAllOrders,
+  selectOrders,
   selectIsConnected,
   selectIsLoading,
-} from '@/services/tasks/ordersFeedAllSocketSlice'
+} from '@/services/tasks/createSocketSlice'
+import { URL_SOCKET } from '@/utils/constants'
 import { Preloader } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect, useRef } from 'react'
 
@@ -16,12 +17,13 @@ import styles from './styles.module.css'
 const FeedPage = (): React.JSX.Element => {
   const isLoading = useAppSelector(selectIsLoading)
   const isConnected = useAppSelector(selectIsConnected)
-  const messages = useAppSelector(selectAllOrders)
+  const messages = useAppSelector(selectOrders)
   const dispatch = useAppDispatch()
   const isCleanupScheduled = useRef(false)
   useEffect(() => {
     if (!isCleanupScheduled.current) {
-      dispatch(connect())
+      console.log('URL_SOCKET connect', `${URL_SOCKET}/orders/all`)
+      dispatch(connect(`${URL_SOCKET}/orders/all`))
       isCleanupScheduled.current = true
     }
 

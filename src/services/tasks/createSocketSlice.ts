@@ -11,7 +11,6 @@ type SocketState = {
   isLoading: boolean
 }
 
-// Начальное состояние
 const initialState: SocketState = {
   isConnected: false,
   messages: null,
@@ -19,14 +18,14 @@ const initialState: SocketState = {
   isLoading: false,
 }
 
-// Создаём слайс
-const feedOrdersAllSocketSlice = createSlice({
-  name: 'socketOrderAll',
+const feedOrdersSocketSlice = createSlice({
+  name: 'socket',
   initialState,
   reducers: {
-    connect: (state) => {
+    connect: (state, _action: PayloadAction<{ url: string }>) => {
       state.isLoading = true
       state.error = null
+      console.log('_action', _action)
     },
     disconnect: (state) => {
       state.isConnected = false
@@ -36,9 +35,9 @@ const feedOrdersAllSocketSlice = createSlice({
     onOpen: (state) => {
       state.isLoading = false
       state.isConnected = true
-      state.error = ''
+      state.error = null
     },
-    onMessage: (state, action: PayloadAction<OrdersAllSocketResponse>) => {
+    onMessage: (state, action: PayloadAction) => {
       state.messages = action.payload
     },
     onError: (state, action: PayloadAction) => {
@@ -53,16 +52,23 @@ const feedOrdersAllSocketSlice = createSlice({
 })
 
 // Экспортируем экшены
-export const { connect, disconnect, onOpen, onMessage, onError, onClose } =
-  feedOrdersAllSocketSlice.actions
+export const {
+  connect,
+  disconnect,
+  sendMessage,
+  onOpen,
+  onMessage,
+  onError,
+  onClose,
+} = feedOrdersSocketSlice.actions
 
 export const selectIsConnected = (state: RootState): boolean =>
-  state.feedOrdersAllSocketSlice.isConnected
+  state.feedOrdersSocketSlice.isConnected
 export const selectIsLoading = (state: RootState): boolean =>
-  state.feedOrdersAllSocketSlice.isLoading
+  state.feedOrdersSocketSlice.isLoading
 
-export const selectAllOrders = (state: RootState): OrdersAllSocketResponse =>
-  state.feedOrdersAllSocketSlice.messages
+export const selectOrders = (state: RootState): OrdersAllSocketResponse =>
+  state.feedOrdersSocketSlice.messages
 
 // Экспортируем редьюсер (его мы позже подключим к store)
-export default feedOrdersAllSocketSlice.reducer
+export default feedOrdersSocketSlice.reducer

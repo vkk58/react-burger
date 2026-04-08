@@ -3,8 +3,7 @@ import {
   onMessage,
   onError,
   onClose,
-} from '@/services/tasks/ordersFeedSocketSlice'
-import { URL_SOCKET } from '@/utils/constants'
+} from '@/services/tasks/createSocketSlice'
 
 import type { OrdersAllSocketResponse } from '@/utils/types'
 import type { Middleware, PayloadAction } from '@reduxjs/toolkit'
@@ -15,16 +14,19 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
   const { type } = action as PayloadAction
 
   if (type === 'socket/connect') {
-    const { payload: token } = action as PayloadAction<string>
+    const { payload } = action as PayloadAction<{ url: string }>
+    const url = payload
+
     if (
       ws &&
       (ws.readyState === WebSocket.OPEN ||
         ws.readyState === WebSocket.CONNECTING)
     ) {
+      console.log('socket/connect', ws)
       return next(action)
     }
 
-    ws = new WebSocket(`${URL_SOCKET}/orders?token=${token}`)
+    ws = new WebSocket(url)
 
     ws.onopen = (): void => {
       store.dispatch(onOpen())
@@ -41,6 +43,7 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
           event.data
         ) as unknown as OrdersAllSocketResponse
 
+        console.log('onmessage', data)
         store.dispatch(onMessage(data))
       } catch (error: unknown) {
         const errorMessage =
@@ -69,6 +72,8 @@ const socketMiddleware: Middleware = (store) => (next) => (action) => {
   }
 
   if (type === 'socket/disconnect') {
+    console.log('wsClose')
+    console.log('ws.readyState', ws?.readyState)
     if (ws && ws.readyState === WebSocket.OPEN) {
       ws.close()
       ws = null

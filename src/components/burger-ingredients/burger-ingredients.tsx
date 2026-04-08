@@ -1,7 +1,7 @@
+import { useAppSelector } from '@/hooks/socketHooks'
 import { selectAllIngredients } from '@/services/tasks/ingredientSlice'
 import { Tab } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { IngredientBox } from '../ingredientBox/ingredientBox'
 
@@ -27,7 +27,7 @@ const tabArray: TabsValue[] = [
 export const BurgerIngredients = (): React.JSX.Element => {
   const tabsRecords = useRef<Record<string, HTMLElement | null>>({})
   const tabsContainer = useRef<HTMLElement>(null)
-  const ingredients = useSelector(selectAllIngredients)
+  const ingredients = useAppSelector(selectAllIngredients)
   const [selectTab, setSelectedTab] = useState('bun')
 
   const ingredientTypes = useMemo(() => {

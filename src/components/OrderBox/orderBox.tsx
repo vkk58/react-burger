@@ -1,9 +1,9 @@
+import { useAppSelector } from '@/hooks/socketHooks'
 import { selectAllIngredients } from '@/services/tasks/ingredientSlice'
 import {
   CurrencyIcon,
   FormattedDate,
 } from '@krgaa/react-developer-burger-ui-components'
-import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import type { Orders } from '@/utils/types'
@@ -18,7 +18,7 @@ export const OrderBox = ({
 }: OrderSocketResponseProps): React.JSX.Element => {
   const navigate = useNavigate()
   const location = useLocation()
-  const ingredientList = useSelector(selectAllIngredients)
+  const ingredientList = useAppSelector(selectAllIngredients)
   const ingredients = order?.ingredients ?? []
   const ingredientCount: number = ingredients.length - 5
   const orderSum = ingredients.reduce((orderSum, ingredient) => {

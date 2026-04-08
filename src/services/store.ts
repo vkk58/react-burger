@@ -1,11 +1,9 @@
 import socketMiddleware from '@/integration/socketFeed'
-import socketAllOrdersMiddleware from '@/integration/socketFeedAllOrders'
 import { configureStore } from '@reduxjs/toolkit'
 
+import feedOrdersSocketSlice from './tasks/createSocketSlice'
 import ingredientsReducer from './tasks/ingredientSlice'
 import orderDetailsSlice from './tasks/orderDetailsSlice'
-import feedOrdersAllSocketSlice from './tasks/ordersFeedAllSocketSlice'
-import feedOrdersSocketSlice from './tasks/ordersFeedSocketSlice'
 import ingredientsOrder from './tasks/orderSlice'
 import orderNumber from './tasks/sendOrderSlice'
 import userInfoSlice from './tasks/userInfoSlice'
@@ -19,11 +17,10 @@ export const store = configureStore({
     userInfo: userInfoSlice,
     userTokens: userTokens,
     feedOrdersSocketSlice: feedOrdersSocketSlice,
-    feedOrdersAllSocketSlice: feedOrdersAllSocketSlice,
     orderDetailsSlice: orderDetailsSlice,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(socketMiddleware, socketAllOrdersMiddleware),
+    getDefaultMiddleware().concat(socketMiddleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

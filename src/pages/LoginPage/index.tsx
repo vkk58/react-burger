@@ -1,4 +1,5 @@
 import { LinkModule } from '@/components/linkModule/linkModule'
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import { userAuth } from '@/services/tasks/action'
 import { getUserInfoError } from '@/services/tasks/userInfoSlice'
 import {
@@ -7,7 +8,6 @@ import {
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import type { UserAuthData } from '@/integration/userData'
 import type React from 'react'
@@ -17,8 +17,8 @@ import styles from '../../pagesCommonStyles/styles/styles.module.css'
 export const LoginPage = (): React.JSX.Element => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const authError = useSelector(getUserInfoError)
-  const dispatch = useDispatch()
+  const authError = useAppSelector(getUserInfoError)
+  const dispatch = useAppDispatch()
 
   const onClickUserAuthHandler = (): void => {
     const userAuthParams: UserAuthData = { email: email, password: password }

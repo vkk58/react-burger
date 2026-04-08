@@ -1,3 +1,4 @@
+import { useAppDispatch } from '@/hooks/socketHooks'
 import { removeIngredientFromOrder } from '@/services/tasks/orderSlice'
 import {
   IngredientItem,
@@ -9,7 +10,6 @@ import {
 } from '@krgaa/react-developer-burger-ui-components'
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
-import { useDispatch } from 'react-redux'
 
 import type { DragSourceMonitor, DropTargetMonitor } from 'react-dnd'
 
@@ -31,7 +31,7 @@ export const DraggableOrderIngredient = (
 ): React.JSX.Element => {
   const ref = useRef<HTMLLIElement>(null)
   const { ingredient, moveIngredient, index } = props
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const [{ handlerId }, drop] = useDrop<
     DragItem,

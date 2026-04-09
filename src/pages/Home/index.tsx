@@ -1,36 +1,13 @@
-import { loadIngredientList } from '@/services/tasks/action'
-import {
-  selectIngredientsError,
-  selectIngredientsStatus,
-} from '@/services/tasks/ingredientSlice'
-import { Preloader } from '@krgaa/react-developer-burger-ui-components'
-import { useEffect } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useDispatch, useSelector } from 'react-redux'
+import { Outlet } from 'react-router-dom'
 
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor'
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients'
 
-import type { AppDispatch } from '@/services/store'
-
-import styles from './styles.module.css'
+import styles from './style.module.css'
 
 export const Home = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>()
-  const ingredientsStatus = useSelector(selectIngredientsStatus)
-  const ingredientsError = useSelector(selectIngredientsError)
-
-  useEffect(() => {
-    void dispatch(loadIngredientList())
-  }, [dispatch])
-
-  useEffect(() => {
-    if (ingredientsStatus === 'error') {
-      alert(ingredientsError || 'Ошибка загрузки')
-    }
-  }, [ingredientsStatus, ingredientsError])
-
   return (
     <div className={styles.app}>
       <h1
@@ -40,16 +17,11 @@ export const Home = (): React.JSX.Element => {
       </h1>
       <DndProvider backend={HTML5Backend}>
         <main className={`${styles.main} pl-5 pr-5`}>
-          {ingredientsStatus === 'loading' && <Preloader />}
-          {ingredientsStatus === 'success' && (
-            <>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </>
-          )}
-          {ingredientsStatus === 'error' && <div>{ingredientsError}</div>}
+          <BurgerIngredients />
+          <BurgerConstructor />
         </main>
       </DndProvider>
+      <Outlet />
     </div>
   )
 }

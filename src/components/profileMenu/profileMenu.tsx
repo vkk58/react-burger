@@ -1,10 +1,10 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import { clearUserData } from '@/services/tasks/userInfoSlice'
 import {
   clearTokens,
   getUserRefreshToken,
 } from '@/services/tasks/userTokensSlice'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { logoutUser } from '../../integration/userData'
@@ -23,10 +23,10 @@ const tabArray: TabsValue[] = [
 ]
 
 export const ProfileMenu = (): React.JSX.Element => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [selectTab, setSelectedTab] = useState('profile')
   const navigate = useNavigate()
-  const userRefreshToken = useSelector(getUserRefreshToken)
+  const userRefreshToken = useAppSelector(getUserRefreshToken)
 
   const handleOnClick = (type: string): void => {
     switch (type) {

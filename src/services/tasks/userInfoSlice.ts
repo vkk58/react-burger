@@ -59,7 +59,7 @@ const userInfoSlice = createSlice({
       })
       .addCase(userUpd.fulfilled, (state, action) => {
         state.status = 'success'
-        state.userInfo = action.payload
+        state.userInfo = action.payload.user
       })
       .addCase(userUpd.rejected, (state, action) => {
         state.status = 'error'

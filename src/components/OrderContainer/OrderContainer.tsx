@@ -1,6 +1,6 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import { currentOrder, sortOrder } from '@/services/tasks/orderSlice'
 import { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import { DraggableOrderIngredient } from '../draggableOrderIngredient/draggableOrderIngredient'
 
@@ -16,8 +16,8 @@ export const OrderContainer = (
   props: TBurgerIngredientsProps
 ): React.JSX.Element => {
   const { ingredients } = props
-  const dispatch = useDispatch()
-  const orderArray = useSelector(currentOrder)
+  const dispatch = useAppDispatch()
+  const orderArray = useAppSelector(currentOrder)
   const moveIngredient = useCallback(
     (dragIndex: number, hoverIndex: number) => {
       const topBun = orderArray[0]

@@ -2,9 +2,10 @@ import { AppHeader } from '@/components/app-header/app-header'
 import { ProfileData } from '@/components/profileData/profileData'
 import ProfileOrders from '@/components/profileOrders/profileOrders'
 import { ProtectedRoute } from '@/components/protectedRoute/ProtectedRoute'
-import { checkUserAuthThunk } from '@/services/tasks/action'
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
+import { checkUserAuthThunk, loadIngredientList } from '@/services/tasks/action'
+import { selectIngredientsStatus } from '@/services/tasks/ingredientSlice'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import FeedPage from '../FeedPage'
@@ -13,6 +14,7 @@ import { Home } from '../Home'
 import { IngredientPage } from '../IngredientPage'
 import { LoginPage } from '../LoginPage'
 import { NotFoundPage } from '../NotFoundPage'
+import { OrderBoxDetailsPage } from '../OrderBoxDetailsPage'
 import { ProfilePage } from '../ProfilePage'
 import { RegisterPage } from '../RegisterPage'
 import { ResetPasswordPage } from '../ResetPasswordPage'
@@ -25,10 +27,12 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
-      },
-      {
-        path: 'ingredients/:id',
-        element: <IngredientPage />,
+        children: [
+          {
+            path: 'ingredients/:id',
+            element: <IngredientPage />,
+          },
+        ],
       },
       {
         path: '/register',
@@ -77,12 +81,24 @@ export const router = createBrowserRouter([
           {
             path: 'orders',
             element: <ProfileOrders />,
+            children: [
+              {
+                path: ':id',
+                element: <OrderBoxDetailsPage />,
+              },
+            ],
           },
         ],
       },
       {
         path: '/feed',
         element: <FeedPage />,
+        children: [
+          {
+            path: ':id',
+            element: <OrderBoxDetailsPage />,
+          },
+        ],
       },
       {
         path: '*',
@@ -93,10 +109,18 @@ export const router = createBrowserRouter([
 ])
 
 export default function App(): React.JSX.Element {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+
+  const ingredientsStatus = useAppSelector(selectIngredientsStatus)
+  useEffect(() => {
+    if (ingredientsStatus === 'idle') {
+      void dispatch(loadIngredientList())
+    }
+  }, [ingredientsStatus, dispatch])
 
   useEffect(() => {
-    dispatch(checkUserAuthThunk())
+    void dispatch(checkUserAuthThunk())
   }, [dispatch])
+
   return <RouterProvider router={router} />
 }

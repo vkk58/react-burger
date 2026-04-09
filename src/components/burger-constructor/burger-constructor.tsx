@@ -1,3 +1,5 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
+import { useAuth } from '@/hooks/useAuth'
 import { createOrder } from '@/services/tasks/action'
 import {
   addIngredient2Order,
@@ -9,6 +11,7 @@ import {
   getOrderError,
   getOrderNumber,
   getOrderStatus,
+  resetOrderState,
 } from '@/services/tasks/sendOrderSlice'
 import {
   Button,
@@ -17,7 +20,7 @@ import {
 } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
   type TIngredient,
@@ -32,20 +35,47 @@ import { OrderDetails } from '../OrderDetails/OrderDetails'
 import styles from './burger-constructor.module.css'
 
 export const BurgerConstructor = (): React.JSX.Element => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [isModalVisible, setModalVisible] = useState(false)
-  const orderArray = useSelector(currentOrder)
+  const orderArray = useAppSelector(currentOrder)
   const orderArrayLength = orderArray.length - 1
   const [modalData, setModaldata] = useState<React.JSX.Element>(null)
-  const orderStatus = useSelector(getOrderStatus)
-  const orderError = useSelector(getOrderError)
-  const orderNumber = useSelector(getOrderNumber)
+  const orderStatus = useAppSelector(getOrderStatus)
+  const orderError = useAppSelector(getOrderError)
+  const orderNumber = useAppSelector(getOrderNumber)
+  const { isUserAuth, isLoading } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const currentOrderSum = useSelector(orderSum)
+  const currentOrderSum = useAppSelector(orderSum)
+
+  const PENDING_ORDER_KEY = 'pendingOrder'
 
   const sendOrder = (): void => {
-    void dispatch(createOrder(orderArray))
+    if (!isUserAuth || isLoading) {
+      sessionStorage.setItem(PENDING_ORDER_KEY, JSON.stringify(orderArray))
+      void navigate('/login', { state: { from: location.pathname } })
+      return
+    } else {
+      void dispatch(createOrder(orderArray))
+    }
   }
+
+  useEffect(() => {
+    const pendingOrderJson = sessionStorage.getItem(PENDING_ORDER_KEY)
+    if (pendingOrderJson && isUserAuth) {
+      const pendingOrder = JSON.parse(
+        pendingOrderJson
+      ) as TIngredient4BurgerConstructor[]
+      sessionStorage.removeItem(PENDING_ORDER_KEY)
+      if (pendingOrder.length > 0) {
+        dispatch(clearOrder())
+        pendingOrder.forEach((ingredient) => {
+          dispatch(addIngredient2Order(ingredient))
+        })
+      }
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (orderStatus === 'success' && orderNumber) {
@@ -57,7 +87,6 @@ export const BurgerConstructor = (): React.JSX.Element => {
       alert(`Ошибка при создании заказа: ${orderError}`)
     }
   }, [orderStatus, orderNumber, orderError, dispatch])
-
   const [, dropRef] = useDrop(
     () => ({
       accept: IngredientItem.INGREDIENT,
@@ -84,6 +113,13 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const firstIngredient = orderArray[0]
   const lastIngredient = orderArray[orderArrayLength]
   const middleIngredients = orderArray.slice(1, orderArrayLength)
+
+  const handleCloseModal = (isVisible: boolean): void => {
+    if (isVisible === false) {
+      dispatch(resetOrderState())
+    }
+    setModalVisible(isVisible)
+  }
 
   return (
     <section
@@ -131,7 +167,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </footer>
       )}
       {isModalVisible && (
-        <Modal setModalVisible={setModalVisible} modalData={modalData} />
+        <Modal setModalVisible={handleCloseModal} modalData={modalData} />
       )}
     </section>
   )

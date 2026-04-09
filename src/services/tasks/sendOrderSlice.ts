@@ -19,7 +19,13 @@ const initialState: SendOrderState = {
 const sendOrderSlice = createSlice({
   name: 'sendOrder',
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrderState: (state) => {
+      state.status = 'idle'
+      state.orderNumber = 0
+      state.error = ''
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createOrder.pending, (state) => {
@@ -37,6 +43,7 @@ const sendOrderSlice = createSlice({
 })
 
 export default sendOrderSlice.reducer
+export const { resetOrderState } = sendOrderSlice.actions
 
 export const getOrderNumber = (state: RootState): number =>
   state.orderNumber.orderNumber

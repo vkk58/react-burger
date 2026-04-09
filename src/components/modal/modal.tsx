@@ -40,7 +40,7 @@ export const Modal = (
 
   return (
     <div className={styles.modal}>
-      <ModalOverLay setModalVisible={setModalVisible} />
+      <ModalOverLay onClose={handleClose} />
       <div className={styles.modalContent}>
         <CloseIcon
           type="primary"

@@ -1,7 +1,14 @@
-import { getUserInfo } from '@/services/tasks/userInfoSlice'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '@/hooks/socketHooks'
+import { getUserInfo, getUserInfoStatus } from '@/services/tasks/userInfoSlice'
 
-export const useAuth = (): boolean => {
-  const userInfo = useSelector(getUserInfo)
-  return userInfo !== null
+type UseAuthResponseType = { isUserAuth: boolean; isLoading: boolean }
+
+export const useAuth = (): UseAuthResponseType => {
+  const userInfo = useAppSelector(getUserInfo)
+  const status = useAppSelector(getUserInfoStatus)
+
+  const isUserAuth = !!userInfo
+  const isLoading = status === 'loading'
+
+  return { isUserAuth, isLoading }
 }

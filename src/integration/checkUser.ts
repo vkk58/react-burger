@@ -6,15 +6,15 @@ export type User = {
 }
 
 export type AuthSuccessResponse = {
-  success: true
-  user: User
+  success: boolean
+  user: User | null
 }
 
 export type AuthErrorResponse = {
   success: false
 }
 
-export type AuthResponse = AuthSuccessResponse | AuthErrorResponse
+export type AuthResponse = AuthSuccessResponse
 
 const getAccessToken = (): string | null => {
   return localStorage.getItem('accessToken')
@@ -24,7 +24,7 @@ export const checkUserAuth = async (): Promise<AuthResponse> => {
   const token = getAccessToken()
 
   if (!token) {
-    return { success: false }
+    return { user: null, success: false }
   }
 
   try {

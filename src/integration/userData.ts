@@ -89,13 +89,11 @@ export async function logoutUser(token: string): Promise<UserLogout> {
 
 export async function userUpdateInfo(
   userUpdateInfo: UserRegistrationInfo
-): Promise<UserInfo> {
+): Promise<UserResponse> {
   const token = getAccessToken()
   try {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`
     const response: AxiosResponse<UserInfo> = await api.patch('/auth/user', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       email: userUpdateInfo.email,
       name: userUpdateInfo.name,
       password: userUpdateInfo.password,

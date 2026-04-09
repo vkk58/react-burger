@@ -17,11 +17,12 @@ export const ForgotPasswordPage = (): React.JSX.Element => {
     setEMail(value)
   }
 
-  const onClickHandler = (): void => {
+  const onClickHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault()
     forgotPasswordAndReset(email)
-      .then((answer) => {
-        alert(answer.message)
-        void navigate('/login')
+      .then(() => {
+        localStorage.setItem('resetPasswordAllowed', 'true')
+        void navigate('/reset-password')
       })
       .catch((error) => {
         console.error('Ошибка восстановления пароля:', error)
@@ -31,14 +32,19 @@ export const ForgotPasswordPage = (): React.JSX.Element => {
   return (
     <main className={styles.main}>
       <h2 className="text text_type_main-large">Восстановление пароля</h2>
-      <EmailInput
-        placeholder="E-mail"
-        value={email}
-        onChange={onChangeHandler}
-      />
-      <Button onClick={onClickHandler} size="medium" type="primary">
-        Восстановить
-      </Button>
+      <form onSubmit={onClickHandler}>
+        <EmailInput
+          placeholder="E-mail"
+          value={email}
+          onChange={onChangeHandler}
+          extraClass="mb-6"
+        />
+        <div className={styles.buttonWrapper}>
+          <Button htmlType="submit" size="medium" type="primary">
+            Восстановить
+          </Button>
+        </div>
+      </form>
       <LinkModule
         routePage={'/login'}
         text={'Вспомнили пароль?'}

@@ -1,18 +1,13 @@
 import styles from './modalOverlay.module.css'
 
 type TModalIngredientDetailsProps = {
-  setModalVisible: (isClose: boolean) => void
+  onClose: () => void
 }
 
 export const ModalOverLay = (
   props: TModalIngredientDetailsProps
 ): React.JSX.Element => {
-  const { setModalVisible } = props
+  const { onClose } = props
 
-  return (
-    <div
-      className={styles.modalOverlay}
-      onClick={() => setModalVisible(false)}
-    />
-  )
+  return <div className={styles.modalOverlay} onClick={onClose} />
 }

@@ -1,8 +1,12 @@
+import { Preloader } from '@krgaa/react-developer-burger-ui-components'
 import { Navigate, useLocation } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
 
 import type React from 'react'
+type LocationState = {
+  from?: string
+}
 
 type ProtectedRouteProps = {
   children: React.JSX.Element
@@ -13,14 +17,21 @@ export const ProtectedRoute = ({
   children,
   valueForRedirect,
 }: ProtectedRouteProps): React.JSX.Element => {
-  const isUserAuth = useAuth()
+  const { isUserAuth, isLoading } = useAuth()
   const location = useLocation()
+  const state = location.state as LocationState | null
 
+  if (isLoading) {
+    return <Preloader />
+  }
   if (isUserAuth === valueForRedirect) {
     return <>{children}</>
-  } else if (isUserAuth === true) {
-    return <Navigate to="/profile" state={{ from: location }} />
-  } else {
-    return <Navigate to="/login" state={{ from: location }} />
   }
+
+  if (isUserAuth === true) {
+    const from = state?.from ?? '/profile'
+    return <Navigate to={from} state={{ from: location }} />
+  }
+
+  return <Navigate to="/login" state={{ from: location }} />
 }

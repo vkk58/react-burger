@@ -1,4 +1,5 @@
 import { LinkModule } from '@/components/linkModule/linkModule'
+import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import { userAuth } from '@/services/tasks/action'
 import { getUserInfoError } from '@/services/tasks/userInfoSlice'
 import {
@@ -7,7 +8,6 @@ import {
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import type { UserAuthData } from '@/integration/userData'
 import type React from 'react'
@@ -17,10 +17,13 @@ import styles from '../../pagesCommonStyles/styles/styles.module.css'
 export const LoginPage = (): React.JSX.Element => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const authError = useSelector(getUserInfoError)
-  const dispatch = useDispatch()
+  const authError = useAppSelector(getUserInfoError)
+  const dispatch = useAppDispatch()
 
-  const onClickUserAuthHandler = (): void => {
+  const onClickUserAuthHandler = (
+    e: React.FormEvent<HTMLFormElement>
+  ): void => {
+    e.preventDefault()
     const userAuthParams: UserAuthData = { email: email, password: password }
     void dispatch(userAuth(userAuthParams))
   }
@@ -39,29 +42,35 @@ export const LoginPage = (): React.JSX.Element => {
     <>
       <main className={styles.main}>
         <h2 className="text text_type_main-large">Вход</h2>
-        <EmailInput
-          placeholder="E-mail"
-          name="email"
-          value={email}
-          onChange={onChangeHandler}
-        />
-        <PasswordInput
-          icon="ShowIcon"
-          name="password"
-          onChange={onChangeHandler}
-          value={password}
-        />
-        {authError && authError !== 'Rejected' && (
-          <div
-            className="text text_type_main-default text_color_inactive"
-            style={{ color: 'red' }}
-          >
-            {authError}
+        <form onSubmit={onClickUserAuthHandler}>
+          <EmailInput
+            placeholder="E-mail"
+            name="email"
+            value={email}
+            onChange={onChangeHandler}
+            extraClass="mb-6"
+          />
+          <PasswordInput
+            icon="ShowIcon"
+            name="password"
+            onChange={onChangeHandler}
+            value={password}
+            extraClass="mb-6"
+          />
+          {authError && authError !== 'Rejected' && (
+            <div
+              className="text text_type_main-default text_color_inactive"
+              style={{ color: 'red' }}
+            >
+              {authError}
+            </div>
+          )}
+          <div className={styles.buttonWrapper}>
+            <Button htmlType="submit" size="medium" type="primary">
+              Войти
+            </Button>
           </div>
-        )}
-        <Button onClick={onClickUserAuthHandler} size="medium" type="primary">
-          Войти
-        </Button>
+        </form>
         <LinkModule
           routePage={'/register'}
           text={'Вы - новый пользователь?'}

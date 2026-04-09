@@ -14,11 +14,12 @@ type OrderResponse = {
 }
 
 export async function sendOrder(
-  order: TIngredient4BurgerConstructor[]
+  order: TIngredient4BurgerConstructor[],
+  token: string
 ): Promise<OrderResponse> {
   try {
     const idArray = order.map((item) => item._id)
-
+    api.defaults.headers.common.Authorization = `Bearer ${token}`
     const response: AxiosResponse<OrderResponse> = await api.post('/orders', {
       ingredients: idArray,
     })

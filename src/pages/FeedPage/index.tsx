@@ -11,6 +11,7 @@ import {
 import { URL_SOCKET } from '@/utils/constants'
 import { Preloader } from '@krgaa/react-developer-burger-ui-components'
 import { useEffect, useRef } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import styles from './styles.module.css'
 
@@ -48,6 +49,7 @@ const FeedPage = (): React.JSX.Element => {
         <FeedOrders messages={messages} />
         <FeedOrdersStatistics />
       </main>
+      <Outlet />
     </div>
   )
 }

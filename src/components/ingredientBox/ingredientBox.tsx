@@ -5,11 +5,8 @@ import {
   Counter,
   CurrencyIcon,
 } from '@krgaa/react-developer-burger-ui-components'
-import { useState } from 'react'
 import { useDrag, type DragSourceMonitor } from 'react-dnd'
-
-import { IngredientDetails } from '../ingredientDetails/ingredientDetails'
-import { Modal } from '../modal/modal'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import type { RootState } from '@/services/store'
 
@@ -21,8 +18,8 @@ type TIngredientBoxProps = {
 export const IngredientBox = ({
   ingredient,
 }: TIngredientBoxProps): React.JSX.Element => {
-  const [isModalVisible, setModalVisible] = useState(false)
-  const [modalData, setModaldata] = useState<React.JSX.Element>(null)
+  const navigate = useNavigate()
+  const location = useLocation()
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: IngredientItem.INGREDIENT,
@@ -40,13 +37,9 @@ export const IngredientBox = ({
   )
 
   const handleOnClick = (): void => {
-    const modalContent = <IngredientDetails ingredient={ingredient} />
-    setModaldata(modalContent)
-    setModalVisible(true)
-  }
-
-  const handleCloseModal = (): void => {
-    setModalVisible(false)
+    void navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location },
+    })
   }
 
   return (
@@ -70,9 +63,6 @@ export const IngredientBox = ({
           <></>
         )}
       </article>
-      {isModalVisible && (
-        <Modal setModalVisible={handleCloseModal} modalData={modalData} />
-      )}
     </>
   )
 }

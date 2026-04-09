@@ -4,10 +4,7 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from '@krgaa/react-developer-burger-ui-components'
-import { useState } from 'react'
-
-import { Modal } from '../modal/modal'
-import { OrderBoxDetails } from '../OrderBoxDetails/orderBoxDetails'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import type { Orders } from '@/utils/types'
 
@@ -19,8 +16,8 @@ type OrderSocketResponseProps = {
 export const OrderBox = ({
   order,
 }: OrderSocketResponseProps): React.JSX.Element => {
-  const [isModalVisible, setModalVisible] = useState(false)
-  const [modalData, setModaldata] = useState<React.JSX.Element>(null)
+  const navigate = useNavigate()
+  const location = useLocation()
   const ingredientList = useAppSelector(selectAllIngredients)
   const ingredients = order?.ingredients ?? []
   const ingredientCount: number = ingredients.length - 5
@@ -28,15 +25,21 @@ export const OrderBox = ({
     const found = ingredientList.find((p) => p._id === ingredient)
     return orderSum + (found ? found.price : 0)
   }, 0)
-
   const handleOnClick = (): void => {
-    const modalContent = <OrderBoxDetails orderId={order._id} />
-    setModaldata(modalContent)
-    setModalVisible(true)
-  }
+    const isProfilePage = location.pathname.includes('/profile/orders')
+    const isFeedPage = location.pathname.includes('/feed')
+    let targetPath = ''
+    if (isProfilePage) {
+      targetPath = `/profile/orders/${order._id}`
+    } else if (isFeedPage) {
+      targetPath = `/feed/${order._id}`
+    } else {
+      targetPath = `/orders/${order._id}`
+    }
 
-  const handleCloseModal = (): void => {
-    setModalVisible(false)
+    void navigate(targetPath, {
+      state: { background: location },
+    })
   }
 
   return (
@@ -88,9 +91,6 @@ export const OrderBox = ({
           </>
         )}
       </article>
-      {isModalVisible && (
-        <Modal setModalVisible={handleCloseModal} modalData={modalData} />
-      )}
     </>
   )
 }

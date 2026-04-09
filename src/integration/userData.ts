@@ -94,11 +94,6 @@ export async function userUpdateInfo(
   try {
     api.defaults.headers.common.Authorization = `Bearer ${token}`
     const response: AxiosResponse<UserInfo> = await api.patch('/auth/user', {
-      /*
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      */
       email: userUpdateInfo.email,
       name: userUpdateInfo.name,
       password: userUpdateInfo.password,

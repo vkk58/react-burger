@@ -34,17 +34,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      /*
-      {
-        path: 'ingredients/:id',
-        element: <IngredientPage />,
-      },
-      |
-      {
-        path: 'feed/:id',
-        element: <OrderBoxDetailsPage />,
-      },
-      */
       {
         path: '/register',
         element: (
@@ -101,12 +90,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      /*
-      {
-        path: 'profile/orders/:id',
-        element: <OrderBoxDetailsPage />,
-      },
-      */
       {
         path: '/feed',
         element: <FeedPage />,

@@ -1,4 +1,5 @@
 import { IngredientDetails } from '@/components/ingredientDetails/ingredientDetails'
+import { Modal } from '@/components/modal/modal'
 import { useAppSelector } from '@/hooks/socketHooks'
 import { selectAllIngredients } from '@/services/tasks/ingredientSlice'
 import { useParams } from 'react-router-dom'
@@ -15,5 +16,5 @@ export const IngredientPage = (): React.JSX.Element => {
   if (!ingredient) {
     return <div className="text text_type_main-large">Ингредиент не найден</div>
   }
-  return <IngredientDetails ingredient={ingredient} />
+  return <Modal modalData={<IngredientDetails ingredient={ingredient} />} />
 }

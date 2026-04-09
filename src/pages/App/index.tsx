@@ -27,15 +27,24 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+        children: [
+          {
+            path: 'ingredients/:id',
+            element: <IngredientPage />,
+          },
+        ],
       },
+      /*
       {
         path: 'ingredients/:id',
         element: <IngredientPage />,
       },
+      |
       {
         path: 'feed/:id',
         element: <OrderBoxDetailsPage />,
       },
+      */
       {
         path: '/register',
         element: (
@@ -83,13 +92,21 @@ export const router = createBrowserRouter([
           {
             path: 'orders',
             element: <ProfileOrders />,
+            children: [
+              {
+                path: ':id',
+                element: <OrderBoxDetailsPage />,
+              },
+            ],
           },
         ],
       },
+      /*
       {
         path: 'profile/orders/:id',
         element: <OrderBoxDetailsPage />,
       },
+      */
       {
         path: '/feed',
         element: <FeedPage />,

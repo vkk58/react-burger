@@ -56,8 +56,9 @@ export const BurgerConstructor = (): React.JSX.Element => {
       sessionStorage.setItem(PENDING_ORDER_KEY, JSON.stringify(orderArray))
       void navigate('/login', { state: { from: location.pathname } })
       return
+    } else {
+      void dispatch(createOrder(orderArray))
     }
-    void dispatch(createOrder(orderArray))
   }
 
   useEffect(() => {
@@ -68,11 +69,11 @@ export const BurgerConstructor = (): React.JSX.Element => {
       ) as TIngredient4BurgerConstructor[]
       sessionStorage.removeItem(PENDING_ORDER_KEY)
       if (pendingOrder.length > 0) {
+        dispatch(clearOrder())
         pendingOrder.forEach((ingredient) => {
           dispatch(addIngredient2Order(ingredient))
         })
       }
-      void dispatch(createOrder(pendingOrder))
     }
   }, [dispatch])
 

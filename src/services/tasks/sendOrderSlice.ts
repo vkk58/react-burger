@@ -10,7 +10,7 @@ export type SendOrderState = {
   error: string
 }
 
-const initialState: SendOrderState = {
+export const initialState: SendOrderState = {
   orderNumber: 0,
   status: 'idle',
   error: '',

@@ -11,7 +11,7 @@ export type UserInfoState = {
   error: string
 }
 
-const initialState: UserInfoState = {
+export const initialState: UserInfoState = {
   userInfo: null,
   status: 'idle',
   error: '',

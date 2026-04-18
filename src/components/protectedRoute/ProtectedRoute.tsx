@@ -1,4 +1,3 @@
-import { Preloader } from '@krgaa/react-developer-burger-ui-components'
 import { Navigate, useLocation } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
@@ -17,13 +16,10 @@ export const ProtectedRoute = ({
   children,
   valueForRedirect,
 }: ProtectedRouteProps): React.JSX.Element => {
-  const { isUserAuth, isLoading } = useAuth()
+  const isUserAuth = useAuth()
   const location = useLocation()
   const state = location.state as LocationState | null
 
-  if (isLoading) {
-    return <Preloader />
-  }
   if (isUserAuth === valueForRedirect) {
     return <>{children}</>
   }

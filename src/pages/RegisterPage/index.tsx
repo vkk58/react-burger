@@ -25,7 +25,7 @@ export const RegisterPage = (): React.JSX.Element => {
   const isUserAuth = useAuth()
 
   useEffect(() => {
-    if (isUserAuth.isUserAuth === true) {
+    if (isUserAuth === true) {
       void navigate('/profile')
     }
   }, [isUserAuth, navigate])

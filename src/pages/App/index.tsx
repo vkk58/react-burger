@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/socketHooks'
 import { checkUserAuthThunk, loadIngredientList } from '@/services/tasks/action'
 import { selectIngredientsStatus } from '@/services/tasks/ingredientSlice'
 import { useEffect } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 
 import FeedPage from '../FeedPage'
 import { ForgotPasswordPage } from '../ForgotPasswordPage'
@@ -19,7 +19,7 @@ import { ProfilePage } from '../ProfilePage'
 import { RegisterPage } from '../RegisterPage'
 import { ResetPasswordPage } from '../ResetPasswordPage'
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: <AppHeader />,

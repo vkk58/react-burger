@@ -1,8 +1,9 @@
 {
-  "name": "vite_bundler",
+  "name": "stellars-burger",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://vkk58.github.io/react-burger",
   "scripts": {
     "build": "vite build",
     "commit": "cz",

@@ -43,7 +43,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const orderStatus = useAppSelector(getOrderStatus)
   const orderError = useAppSelector(getOrderError)
   const orderNumber = useAppSelector(getOrderNumber)
-  const { isUserAuth, isLoading } = useAuth()
+  const isUserAuth = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -52,7 +52,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const PENDING_ORDER_KEY = 'pendingOrder'
 
   const sendOrder = (): void => {
-    if (!isUserAuth || isLoading) {
+    if (!isUserAuth) {
       sessionStorage.setItem(PENDING_ORDER_KEY, JSON.stringify(orderArray))
       void navigate('/login', { state: { from: location.pathname } })
       return

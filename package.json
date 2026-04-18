@@ -1,8 +1,9 @@
 {
-  "name": "vite_bundler",
+  "name": "stellars-burger",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://vkk58.github.io/react-burger",
   "scripts": {
     "build": "vite build",
     "commit": "cz",
@@ -19,7 +20,8 @@
     "preview": "vite preview",
     "stylelint": "stylelint \"./src/**/*.css\" --fix",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "coverage": "vitest --coverage"
   },
   "dependencies": {
     "@babel/runtime": "^7.28.4",
@@ -37,15 +39,18 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@playwright/test": "^1.57.0",
-    "@testing-library/jest-dom": "^6.9.0",
-    "@testing-library/react": "^16.3.0",
+    "@playwright/test": "^1.59.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.6.0",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.3",
     "@vitest/browser": "^3.2.4",
     "@vitest/ui": "^3.2.4",
+    "baseline-browser-mapping": "^2.10.19",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.36.0",
@@ -62,7 +67,7 @@
     "gh-pages": "^6.3.0",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
-    "jsdom": "^27.0.0",
+    "jsdom": "^27.4.0",
     "lint-staged": "^16.2.3",
     "prettier": "^3.8.1",
     "stylelint": "^16.24.0",

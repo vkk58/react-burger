@@ -11,7 +11,7 @@ export type OrderDetailsState = {
   error: string
 }
 
-const initialState: OrderDetailsState = {
+export const initialState: OrderDetailsState = {
   order: null,
   status: 'idle',
   error: '',
